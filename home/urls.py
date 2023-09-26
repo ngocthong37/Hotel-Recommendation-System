@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.get_home),
+    path('home', views.recommend_hotels)
 ]

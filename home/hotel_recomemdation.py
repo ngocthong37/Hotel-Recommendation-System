@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import json
 import matplotlib.pyplot as plt
 from keras.models import Sequential
 from keras.layers import LSTM
@@ -17,6 +18,7 @@ from sklearn.tree import DecisionTreeClassifier
 from keras.callbacks import EarlyStopping
 import math
 import os
+import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
 from nltk.stem.snowball import SnowballStemmer
@@ -24,13 +26,17 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 
-hotel_details=pd.read_csv('C:\Users\T3D Computer\OneDrive\Documents\Python Web\site1\home\Hotel_details.csv',delimiter=',')
-hotel_rooms=pd.read_csv('C:\Users\T3D Computer\OneDrive\Documents\Python Web\site1\home\Hotel_Room_attributes.csv',delimiter=',')
-hotel_cost=pd.read_csv('C:\Users\T3D Computer\OneDrive\Documents\Python Web\site1\home\hotels_RoomPrice.csv',delimiter=',')
+hotel_details=pd.read_csv('C:\\Users\\T3D Computer\\OneDrive\\Documents\\Python Web\\site1\\home\\Hotel_details.csv',delimiter=',')
+hotel_rooms=pd.read_csv('C:\\Users\\T3D Computer\\OneDrive\\Documents\\Python Web\\site1\\home\\Hotel_Room_attributes.csv',delimiter=',')
+hotel_cost=pd.read_csv('C:\\Users\\T3D Computer\\OneDrive\\Documents\\Python Web\\site1\\home\\hotels_RoomPrice.csv',delimiter=',')
 
 del hotel_details['id']
 del hotel_rooms['id']
 del hotel_details['zipcode']
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 hotel_details=hotel_details.dropna()
 hotel_rooms=hotel_rooms.dropna()
@@ -41,15 +47,21 @@ hotel=pd.merge(hotel_rooms,hotel_details,left_on='hotelcode',right_on='hotelid',
 
 
 def citybased(city):
-    hotel['city']=hotel['city'].str.lower()
-    citybase=hotel[hotel['city']==city.lower()]
-    citybase=citybase.sort_values(by='starrating',ascending=False)
-    citybase.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    if(citybase.empty==0):
-        hname=citybase[['hotelname','starrating','address','roomamenities','ratedescription']]
-        return hname.head()
+    hotel['city'] = hotel['city'].str.lower()
+    citybase = hotel[hotel['city'] == city.lower()]
+    citybase = citybase.sort_values(by='starrating', ascending=False)
+    citybase.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
+    
+    if not citybase.empty:
+        hname = citybase[['hotelname', 'starrating', 'address', 'roomamenities', 'ratedescription']]
+        result = hname.head().to_dict(orient='records')
+        return json.dumps(result, ensure_ascii=False)
     else:
-        print('No Hotels Available')
+        return json.dumps({'error': 'No Hotels Available'}, ensure_ascii=False)
+
+# Gọi hàm citybased và in kết quả dưới dạng JSON
+
+
 room_no=[
      ('king',2),
    ('queen',2), 
@@ -119,7 +131,8 @@ def requirementbased(city,number,features):
     reqbased['similarity']=cos
     reqbased=reqbased.sort_values(by='similarity',ascending=False)
     reqbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    return reqbased[['city','hotelname','roomtype','guests_no','starrating','address','roomamenities','ratedescription','similarity']].head(10)
+    result = reqbased[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription', 'similarity']].head(10).to_dict(orient='records')
+    return json.dumps(result, ensure_ascii=False)
 
 def ratebased(city,number,features):
     hotel['city']=hotel['city'].str.lower()
@@ -149,4 +162,5 @@ def ratebased(city,number,features):
     rtbased['similarity']=cos
     rtbased=rtbased.sort_values(by='similarity',ascending=False)
     rtbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    return rtbased[['city','hotelname','roomtype','guests_no','starrating','address','ratedescription','similarity']].head(10)
+    result = rtbased[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'ratedescription', 'similarity']].head(10).to_dict(orient='records')
+    return json.dumps(result, ensure_ascii=False)

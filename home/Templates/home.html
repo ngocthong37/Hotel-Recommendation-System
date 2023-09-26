@@ -1,74 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Hotel Information</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-        }
         .container {
-            max-width: 800px;
+            max-width: 400px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            color: #333;
-            font-size: 24px;
+        .input-group {
+            margin-bottom: 15px;
         }
-        table {
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input[type="text"] {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
             padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        th {
-            background-color: #f2f2f2;
+        .input-group input[type="button"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Hotel Information</h1>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Hotel Name</th>
-                <th>Address</th>
-                <th>City</th>
-                <th>Country</th>
-                <th>Zipcode</th>
-                <th>Property Type</th>
-                <th>Star Rating</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-                <th>Source URL</th>
-                <th>Currency</th>
-            </tr>
-            <!-- Replace the following rows with your data -->
-            <tr>
-                <td>46406</td>
-                <td>Mediteran Bungalow Galeb</td>
-                <td>Vukovarska 7</td>
-                <td>Omis</td>
-                <td>Croatia</td>
-                <td>21310.0</td>
-                <td>Holiday parks</td>
-                <td>4</td>
-                <td>43.440124</td>
-                <td>16.682505</td>
-                <td><a href="https://www.booking.com/hotel/hr/bungalow-luxu...">Link</a></td>
-                <td>EUR</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </table>
+        <h2>Tìm Kiếm</h2>
+        <div class="input-group">
+            <label for="city">Tên thành phố:</label>
+            <input type="text" id="city" name="city" placeholder="Nhập tên thành phố...">
+        </div>
+        <div class="input-group">
+            <label for="people">Số lượng người:</label>
+            <input type="text" id="people" name="people" placeholder="Nhập số lượng người...">
+        </div>
+        <div class="input-group">
+            <label for="interest">Sở thích:</label>
+            <input type="text" id="interest" name="interest" placeholder="Nhập sở thích...">
+        </div>
+        <div class="input-group">
+            <input type="button" value="Search">
+        </div>
     </div>
 </body>
 </html>
