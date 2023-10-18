@@ -26,9 +26,9 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 
-hotel_details=pd.read_csv('C:\\Users\\T3D Computer\\OneDrive\\Documents\\Python Web\\site1\\home\\Hotel_details.csv',delimiter=',')
-hotel_rooms=pd.read_csv('C:\\Users\\T3D Computer\\OneDrive\\Documents\\Python Web\\site1\\home\\Hotel_Room_attributes.csv',delimiter=',')
-hotel_cost=pd.read_csv('C:\\Users\\T3D Computer\\OneDrive\\Documents\\Python Web\\site1\\home\\hotels_RoomPrice.csv',delimiter=',')
+hotel_details=pd.read_csv('E:\\Downloadedge\\Hotel_details.csv',delimiter=',')
+hotel_rooms=pd.read_csv('E:\\Downloadedge\\Hotel_Room_attributes.csv',delimiter=',')
+hotel_cost=pd.read_csv('E:\\Downloadedge\\hotels_RoomPrice.csv',delimiter=',')
 
 del hotel_details['id']
 del hotel_rooms['id']
