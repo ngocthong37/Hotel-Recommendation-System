@@ -1,9 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your models here.
+
+class CreateUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields=['username','email','first_name','last_name','password1','password2']
+    
 
 class User(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=False)
