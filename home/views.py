@@ -1,6 +1,5 @@
 from django.shortcuts import render,redirect
-from .hotel_recomemdation import requirementbased 
-from .hotel_recomemdation import citybased 
+from .hotel_recomemdation import citybased, random_forest_based
 from .models import *
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -38,19 +37,19 @@ def logoutPage(request):
 def get_home(request):
     return render(request, 'home.html') 
 
-def recommend_hotels_by_requirement(request):
+def recommend_hotels_by_city_base(request):
     # Đoạn logic xử lý yêu cầu của người dùng và gọi hàm ratebased
     city = 'london'
-    number = 4
-    features = 'I need a room with free wifi'
     
-    output = requirementbased(city, number, features)
+    output = citybased(city)
     print(output)
     # Trả kết quả về template hoặc API response
     return render(request, 'home.html')
 
-def recommend_hotel_by_city(request):
+def recommend_hotel_by_city_feature(request):
     city = "london"
-    output = citybased(city)
+    number = 4
+    features = 'I need a room with free wifi'
+    output = random_forest_based(city, number, features)
     print(output)
     return render(request, 'home.html')

@@ -22,6 +22,8 @@ class User(models.Model):
 class UserPreferences(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     feature = models.CharField(max_length=100, null=True)
+    city = models.CharField(max_length=100, null=True)
+    updateAt = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.feature
 
