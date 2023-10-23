@@ -26,9 +26,29 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 
-hotel_details=pd.read_csv('E:\\Downloadedge\\Hotel_details.csv',delimiter=',')
-hotel_rooms=pd.read_csv('E:\\Downloadedge\\Hotel_Room_attributes.csv',delimiter=',')
-hotel_cost=pd.read_csv('E:\\Downloadedge\\hotels_RoomPrice.csv',delimiter=',')
+# Lấy đường dẫn của thư mục chứa script Python hiện tại
+current_directory = os.getcwd()
+
+# Đường dẫn tương đối đến các tệp tin CSV
+hotel_rooms_path = os.path.join(current_directory, 'data-set', 'Hotel_Room_attributes.csv')
+hotel_cost_path = os.path.join(current_directory, 'data-set', 'hotels_RoomPrice.csv')
+hotel_details_path = os.path.join(current_directory, 'data-set', 'Hotel_details.csv')
+
+# Kiểm tra xem các tệp tin tồn tại hay không và đọc chúng nếu tồn tại
+if os.path.exists(hotel_rooms_path):
+    hotel_rooms = pd.read_csv(hotel_rooms_path, delimiter=',')
+else:
+    print("Tệp tin 'Hotel_Room_attributes.csv' không tồn tại.")
+
+if os.path.exists(hotel_cost_path):
+    hotel_cost = pd.read_csv(hotel_cost_path, delimiter=',')
+else:
+    print("Tệp tin 'hotels_RoomPrice.csv' không tồn tại.")
+
+if os.path.exists(hotel_details_path):
+    hotel_details = pd.read_csv(hotel_details_path, delimiter=',')
+else:
+    print("Tệp tin 'Hotel_details.csv' không tồn tại.")
 
 del hotel_details['id']
 del hotel_rooms['id']
