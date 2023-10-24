@@ -18,7 +18,7 @@
   <body>
     <div class="container-fluid">
       <div class="layout">
-        <div>
+        <div class="form-container">
           <h1 class="title">Booking App</h1>
           <form action="" method="POST">
             {% csrf_token %}
@@ -30,8 +30,6 @@
                   id="username"
                   name="username"
                 />
-                {% comment %}
-                <label for="email">Email Address</label> {%endcomment %}
               </div>
               <div class="form-input">
                 <input
@@ -40,13 +38,13 @@
                   id="password"
                   name="password"
                 />
-                {% comment %}
-                <label for="password">Password</label> {%endcomment %}
               </div>
               <div class="form-input">
                 <a class="forget-password">Forget password?</a>
-                {% comment %}
-                <label for="password">Password</label> {%endcomment %}
+              </div>
+              <div class="sign-in">
+                New to booking app?
+                <a class="sign-in" href="/register"> Create new account</a>
               </div>
               <button
                 class="btn btn-success btn-custom"

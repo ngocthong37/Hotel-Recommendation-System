@@ -73,28 +73,30 @@ h1 {
 }
 
 /* .form-input input:focus + label,
-.form-input input:not(:placeholder-shown) + label {
-  top: 0;
-  font-size: 0.8rem;
-  color: #00a55d;
-  background: #fff;
-  padding: 7px;
-}
+  .form-input input:not(:placeholder-shown) + label {
+    top: 0;
+    font-size: 0.8rem;
+    color: #00a55d;
+    background: #fff;
+    padding: 7px;
+  }
+  
+  .form-input input:focus {
+    border: 1px solid #00a55d;
+  } */
 
-.form-input input:focus {
-  border: 1px solid #00a55d;
-} */
-
-.form-input .forget-password {
+.form-input .sign-in {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.forget-password {
+.sign-in {
   color: #00a55d;
   text-decoration-color: #00a55d;
   margin-bottom: 24px;
+  display: inline;
+  text-align: right;
 }
 
 /* ============== BUTTON ================== */
@@ -113,14 +115,6 @@ h1 {
 
 .form-container {
   width: 100%;
-}
-
-.sign-in {
-  color: #00a55d;
-  text-decoration-color: #00a55d;
-  margin-bottom: 24px;
-  display: inline;
-  text-align: right;
 }
 
 @media screen and (min-width: 768px) {
