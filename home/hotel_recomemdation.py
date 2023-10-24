@@ -25,6 +25,17 @@ from nltk.stem.snowball import SnowballStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+import csv
+
+# Initialize the TF-IDF vectorizer
+tfidf_vectorizer = TfidfVectorizer()
 
 # Lấy đường dẫn của thư mục chứa script Python hiện tại
 current_directory = os.getcwd()
@@ -54,9 +65,10 @@ del hotel_details['id']
 del hotel_rooms['id']
 del hotel_details['zipcode']
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# 3 dòng này chỉ chạy lần đầu
+# nltk.download('punkt')
+# nltk.download('stopwords')
+# nltk.download('wordnet')
 
 hotel_details=hotel_details.dropna()
 hotel_rooms=hotel_rooms.dropna()
@@ -64,6 +76,11 @@ hotel_rooms=hotel_rooms.dropna()
 hotel_details.drop_duplicates(subset='hotelid',keep=False,inplace=True)
 hotel=pd.merge(hotel_rooms,hotel_details,left_on='hotelcode',right_on='hotelid',how='inner')
 
+# Chọn cột 'hotelid' và 'hotelname' từ bảng hotel
+selected_hotel_columns = hotel_details[['hotelid', 'hotelname']]
+# Merge bảng selected_hotel_columns và bảng hotel_cost
+hotel_all = pd.merge(hotel_cost, selected_hotel_columns, left_on='hotelcode', right_on='hotelid', how='inner')
+# hotel_all.to_csv('example.csv', index=False)
 
 
 def citybased(city):
@@ -184,3 +201,51 @@ def ratebased(city,number,features):
     rtbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
     result = rtbased[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'ratedescription', 'similarity']].head(10).to_dict(orient='records')
     return json.dumps(result, ensure_ascii=False)
+
+
+def random_forest_based(city, number, features):
+    hotel['city'] = hotel['city'].str.lower()
+    hotel['roomamenities'] = hotel['roomamenities'].str.lower()
+    features = features.lower()
+
+    # Lọc dữ liệu theo city và số lượng khách cần
+    rf_data = hotel[(hotel['city'] == city.lower()) & (hotel['guests_no'] == number)]
+
+    if not rf_data.empty:
+        # Tạo dữ liệu huấn luyện
+        X = tfidf_vectorizer.fit_transform(rf_data['roomamenities'])  # Ma trận TF-IDF
+        y = rf_data['hotelcode']  # Nhãn (hotelcode)
+
+        # Chia dữ liệu thành tập huấn luyện và tập kiểm tra
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Tạo và huấn luyện mô hình Random Forest
+        rf_model = RandomForestClassifier()
+        rf_model.fit(X_train, y_train)
+
+        # Dự đoán trên tập kiểm tra
+        y_pred = rf_model.predict(X_test)
+
+        # Tính độ chính xác
+        accuracy = accuracy_score(y_test, y_pred)
+        print("Accuracy:", accuracy)
+
+        # Biến đổi các features theo TF-IDF
+        features_tfidf = tfidf_vectorizer.transform([features])
+
+        # Dự đoán khách sạn dựa trên features
+        predictions = rf_model.predict(features_tfidf)
+
+        # Lấy ra các khách sạn dự đoán
+        predicted_hotels = rf_data[rf_data['hotelcode'].isin(predictions)]
+
+        if not predicted_hotels.empty:
+            # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
+            predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
+            result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(10).to_dict(orient='records')
+            print(result)
+            return json.dumps(result, ensure_ascii=False)
+        else:
+            return json.dumps({'error': 'No Hotels Available based on given features'}, ensure_ascii=False)
+    else:
+        return json.dumps({'error': 'No Hotels Available for the specified city and number of guests'}, ensure_ascii=False)
