@@ -1,6 +1,5 @@
 from django.shortcuts import render,redirect
-from .hotel_recomemdation import requirementbased 
-from .hotel_recomemdation import citybased 
+from .hotel_recomemdation import requirementbased, random_forest_based, citybased 
 from .models import *
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -52,5 +51,14 @@ def recommend_hotels_by_requirement(request):
 def recommend_hotel_by_city(request):
     city = "london"
     output = citybased(city)
+    print(output)
+    return render(request, 'home.html')
+
+
+def recommend_hotel_by_city_feature(request):
+    city = "london"
+    number = 4
+    features = 'I need a room with free wifi'
+    output = random_forest_based(city, number, features)
     print(output)
     return render(request, 'home.html')
