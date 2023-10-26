@@ -203,49 +203,102 @@ def ratebased(city,number,features):
     return json.dumps(result, ensure_ascii=False)
 
 
-def random_forest_based(city, number, features):
+# def random_forest_based(city, number, features):
+#     hotel['city'] = hotel['city'].str.lower()
+#     hotel['roomamenities'] = hotel['roomamenities'].str.lower()
+#     features = features.lower()
+
+#     # Lọc dữ liệu theo city và số lượng khách cần
+#     rf_data = hotel[(hotel['city'] == city.lower()) & (hotel['guests_no'] == number)]
+
+#     if not rf_data.empty:
+#         # Tạo dữ liệu huấn luyện
+#         X = tfidf_vectorizer.fit_transform(rf_data['roomamenities'])  # Ma trận TF-IDF
+#         y = rf_data['hotelcode']  # Nhãn (hotelcode)
+#         # Chia dữ liệu thành tập huấn luyện và tập kiểm tra
+#         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+#         # Tạo và huấn luyện mô hình Random Forest
+#         rf_model = RandomForestClassifier()
+#         rf_model.fit(X_train, y_train)
+#         # Dự đoán trên tập kiểm tra
+#         y_pred = rf_model.predict(X_test)
+#         # Tính độ chính xác
+#         accuracy = accuracy_score(y_test, y_pred)
+#         print("Accuracy:", accuracy)
+#         # Biến đổi các features theo TF-IDF
+#         features_tfidf = tfidf_vectorizer.transform([features])
+#         # Dự đoán khách sạn dựa trên features
+#         predictions = rf_model.predict(features_tfidf)
+#         predicted_hotels = rf_data[rf_data['hotelcode'].isin(predictions)]
+#         if not predicted_hotels.empty:
+#             predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
+#             # result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(10).to_dict(orient='records')
+#             result = predicted_hotels[['hotelname']].head(5)
+#             # print(result)
+#             return result
+#         else:
+#             return "No Hotels Available based on given features"
+#     else:
+#         return "No Hotels Available based on given features"
+    
+
+
+    #     if not predicted_hotels.empty:
+    #         # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
+    #         predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
+    #         result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(10).to_dict(orient='records')
+    #         print(result)
+    #         return json.dumps(result, ensure_ascii=False)
+    #     else:
+    #         return json.dumps({'error': 'No Hotels Available based on given features'}, ensure_ascii=False)
+    # else:
+    #     return json.dumps({'error': 'No Hotels Available for the specified city and number of guests'}, ensure_ascii=False)
+
+
+
+
+def random_forest_based(city_list, number_list, features_list):
     hotel['city'] = hotel['city'].str.lower()
     hotel['roomamenities'] = hotel['roomamenities'].str.lower()
-    features = features.lower()
 
-    # Lọc dữ liệu theo city và số lượng khách cần
-    rf_data = hotel[(hotel['city'] == city.lower()) & (hotel['guests_no'] == number)]
+    # Chuyển đổi city, number, và features thành danh sách
+    city_list = [city.lower() for city in city_list]
+    number_list = [number for number in number_list]
+    features_list = [features.lower() for features in features_list]
 
-    if not rf_data.empty:
-        # Tạo dữ liệu huấn luyện
-        X = tfidf_vectorizer.fit_transform(rf_data['roomamenities'])  # Ma trận TF-IDF
-        y = rf_data['hotelcode']  # Nhãn (hotelcode)
+    # Tạo một danh sách kết quả để lưu các kết quả tương ứng với mỗi cặp (city, number)
+    results = []
 
-        # Chia dữ liệu thành tập huấn luyện và tập kiểm tra
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    for city, number, features in zip(city_list, number_list, features_list):
+        # Lọc dữ liệu theo city và số lượng khách cần
+        rf_data = hotel[(hotel['city'] == city) & (hotel['guests_no'] == number)]
 
-        # Tạo và huấn luyện mô hình Random Forest
-        rf_model = RandomForestClassifier()
-        rf_model.fit(X_train, y_train)
-
-        # Dự đoán trên tập kiểm tra
-        y_pred = rf_model.predict(X_test)
-
-        # Tính độ chính xác
-        accuracy = accuracy_score(y_test, y_pred)
-        print("Accuracy:", accuracy)
-
-        # Biến đổi các features theo TF-IDF
-        features_tfidf = tfidf_vectorizer.transform([features])
-
-        # Dự đoán khách sạn dựa trên features
-        predictions = rf_model.predict(features_tfidf)
-
-        # Lấy ra các khách sạn dự đoán
-        predicted_hotels = rf_data[rf_data['hotelcode'].isin(predictions)]
-
-        if not predicted_hotels.empty:
-            # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
-            predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
-            result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(10).to_dict(orient='records')
-            print(result)
-            return json.dumps(result, ensure_ascii=False)
+        if not rf_data.empty:
+            # Tạo dữ liệu huấn luyện
+            X = tfidf_vectorizer.fit_transform(rf_data['roomamenities'])  # Ma trận TF-IDF
+            y = rf_data['hotelcode']  # Nhãn (hotelcode)
+            # Chia dữ liệu thành tập huấn luyện và tập kiểm tra
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            # Tạo và huấn luyện mô hình Random Forest
+            rf_model = RandomForestClassifier()
+            rf_model.fit(X_train, y_train)
+            # Dự đoán trên tập kiểm tra
+            y_pred = rf_model.predict(X_test)
+            # Tính độ chính xác
+            accuracy = accuracy_score(y_test, y_pred)
+            print("Accuracy:", accuracy)
+            # Biến đổi các features theo TF-IDF
+            features_tfidf = tfidf_vectorizer.transform([features])
+            # Dự đoán khách sạn dựa trên features
+            predictions = rf_model.predict(features_tfidf)
+            predicted_hotels = rf_data[rf_data['hotelcode'].isin(predictions)]
+            if not predicted_hotels.empty:
+                predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
+                result = predicted_hotels[['hotelname']].head(5)
+                results.append(result)
+            else:
+                results.append("No Hotels Available based on given features")
         else:
-            return json.dumps({'error': 'No Hotels Available based on given features'}, ensure_ascii=False)
-    else:
-        return json.dumps({'error': 'No Hotels Available for the specified city and number of guests'}, ensure_ascii=False)
+            results.append("No Hotels Available based on given features")
+    print(results)
+    return results
