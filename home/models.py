@@ -11,7 +11,7 @@ class CreateUserForm(UserCreationForm):
         fields=['username','email','first_name','last_name','password1','password2']
     
 
-class User(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=False)
     name = models.CharField(max_length=100, null=True)
     email = models.CharField(max_length=200, null=True)
@@ -20,7 +20,7 @@ class User(models.Model):
         return self.name
 
 class UserPreferences(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True)
     city = models.CharField(max_length=200, null=True)
     feature = models.CharField(max_length=100, null=True)
     createAt = models.DateTimeField(auto_now_add=True)
@@ -46,14 +46,14 @@ class BookingHotel(models.Model):
 #         return self.hotel_recommend
 
 class WishList(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True) 
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True) 
     hotelID = models.CharField(max_length=200, null=True)
     saved_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.hotel
     
 class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     hotelID = models.CharField(max_length=200, null=True)
     value = models.PositiveIntegerField(default=0, validators=[MaxValueValidator(5), MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)

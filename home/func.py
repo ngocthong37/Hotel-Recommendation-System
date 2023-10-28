@@ -1,5 +1,5 @@
 from datetime import datetime
-from .models import BookingHotel, User
+from .models import *
 
 def bookHotel(user_id, hotel_id, create_at):
     user = User.objects.get(pk=user_id)
