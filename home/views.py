@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .hotel_recomemdation import requirementbased, random_forest_based, citybased 
 from .models import *
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+from.func import *
 # Create your views here.
 
 def register(request):
@@ -62,3 +63,23 @@ def recommend_hotel_by_city_feature(request):
     output = random_forest_based(city, number, features)
     print(output)
     return render(request, 'home.html')
+
+def new_booking(request):
+    if request.method == 'POST':
+        user_id = request.POST['user']
+        hotel_id = request.POST['hotelID']
+        create_at = datetime.now()
+        #booking = BookingHotel.objects.create(user_id=user_id, hotelID=hotel_id)
+        bookHotel(user_id, hotel_id, create_at)
+        return redirect('booking_list')
+    else:
+        users = User.objects.all()
+        return render(request, 'new_booking.html', {'users': users})
+
+def booking_detail(request, booking_id):
+    booking = get_object_or_404(BookingHotel, booking_id=booking_id)
+    return render(request, 'booking_detail.html', {'booking': booking})
+
+def booking_list(request):
+    bookings = BookingHotel.objects.all()
+    return render(request, 'booking_list.html', {'bookings': bookings})

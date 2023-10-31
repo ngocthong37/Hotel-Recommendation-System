@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Booking</title>
+</head>
+<body>
+    <h1>Chi Tiết Booking</h1>
+
+    <p>Booking ID: {{ booking.booking_id }}</p>
+    <p>Người Dùng: {{ booking.user.username }}</p>
+    <p>Mã Khách Sạn: {{ booking.hotelID }}</p>
+    <p>Ngày Booking: {{ booking.date_booking }}</p>
+    <p>Ngày Trả Phòng: {{ booking.date_return }}</p>
+    <p>Trạng thái: {{ booking.status }}</p>
+</body>
+</html>
