@@ -72,7 +72,6 @@ del hotel_details['zipcode']
 
 hotel_details=hotel_details.dropna()
 hotel_rooms=hotel_rooms.dropna()
-
 hotel_details.drop_duplicates(subset='hotelid',keep=False,inplace=True)
 hotel=pd.merge(hotel_rooms,hotel_details,left_on='hotelcode',right_on='hotelid',how='inner')
 
@@ -82,13 +81,11 @@ selected_hotel_columns = hotel_details[['hotelid', 'hotelname']]
 hotel_all = pd.merge(hotel_cost, selected_hotel_columns, left_on='hotelcode', right_on='hotelid', how='inner')
 # hotel_all.to_csv('example.csv', index=False)
 
-
 def citybased(city):
     hotel['city'] = hotel['city'].str.lower()
     citybase = hotel[hotel['city'] == city.lower()]
     citybase = citybase.sort_values(by='starrating', ascending=False)
     citybase.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
-    
     if not citybase.empty:
         hname = citybase[['hotelname', 'starrating', 'address', 'roomamenities', 'ratedescription']]
         result = hname.head().to_dict(orient='records')
@@ -241,8 +238,8 @@ def random_forest_based(city, number, features):
 
         if not predicted_hotels.empty:
             # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
-            predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
-            result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(10).to_dict(orient='records')
+            # predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
+            result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(2).to_dict(orient='records')
             print(result)
             return json.dumps(result, ensure_ascii=False)
         else:

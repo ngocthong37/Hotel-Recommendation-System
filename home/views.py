@@ -6,14 +6,25 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from.func import *
+from django.core.exceptions import ObjectDoesNotExist
+
 # Create your views here.
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     form = CreateUserForm()
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            user_profile = UserProfile()
+            user_profile.user = user
+            user_profile.name = request.POST['first_name'] + ' ' + request.POST['last_name'] # Lấy giá trị tên từ biểu mẫu
+            user_profile.email = request.POST['email']  # Lấy giá trị email từ biểu mẫu
+            user_profile.password = request.POST['password1']  # Lấy giá trị mật khẩu từ biểu mẫu
+            user_profile.save()
+            return redirect('login')
     context ={'form':form}
     return render(request,'regiter.html',context)
 
@@ -36,14 +47,33 @@ def logoutPage(request):
     return redirect(loginPage)
 
 def get_home(request):
-    return render(request, 'home.html') 
+    if not request.user.is_authenticated:
+        return redirect('login') 
+    username = request.user.first_name + " " + request.user.last_name
+    user_profile = UserProfile.objects.get(user=request.user) 
+    try:
+        userPreferences = UserPreferences.objects.get(user=user_profile)
+    except ObjectDoesNotExist:
+        userPreferences = None 
+    if userPreferences is not None:
+        print(userPreferences.number)
+        print(userPreferences.city)
+        print(userPreferences.feature)
+        output = random_forest_based(userPreferences.city, userPreferences.number, userPreferences.feature)
+        print(output)
+    else:
+        city = 'london'
+        number = 4
+        features = 'I need a room with free wifi'
+        output = requirementbased(city, number, features)
+        print(output)    # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
+    return render(request, 'home.html', {'username': username}) 
 
 def recommend_hotels_by_requirement(request):
     # Đoạn logic xử lý yêu cầu của người dùng và gọi hàm ratebased
     city = 'london'
     number = 4
-    features = 'I need a room with free wifi'
-    
+    features = 'I need a room with heating'
     output = requirementbased(city, number, features)
     print(output)
     # Trả kết quả về template hoặc API response
