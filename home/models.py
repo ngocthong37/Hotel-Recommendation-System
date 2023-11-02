@@ -43,7 +43,7 @@ class WishList(models.Model):
     hotelID = models.CharField(max_length=200, null=True)
     saved_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.hotel
+        return self.hotelID
     
 class Rating(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)

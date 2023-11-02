@@ -124,3 +124,20 @@ def add_booking(request):
         return redirect("booking_list")  # Chuyển hướng đến trang danh sách booking sau khi thêm
 
     return render(request, "add_booking.html")
+
+def add_wishlist(request):
+    if request.method == "POST":
+        hotel_id = request.POST.get("hotel_id")
+        user = UserProfile.objects.get(user=request.user)  # Lấy UserProfile của người dùng đang đăng nhập
+
+        # Lồng đoạn code vào trong view
+        wish_list_item, created = WishList.objects.get_or_create(user=user, hotelID=hotel_id)
+
+        return redirect("wishlist")  # Chuyển hướng đến trang wishlist sau khi thêm
+
+    return render(request, "add_wishlist.html")
+
+def wishlist(request):
+    user = UserProfile.objects.get(user=request.user) 
+    wishlist_items = WishList.objects.filter(user=user)
+    return render(request, "wishlist.html", {'wishlist_items': wishlist_items})
