@@ -22,6 +22,7 @@ class UserProfile(models.Model):
 class UserPreferences(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True)
     city = models.CharField(max_length=200, null=True)
+    number = models.CharField(max_length=50, null=True)
     feature = models.CharField(max_length=100, null=True)
     createAt = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -37,14 +38,6 @@ class BookingHotel(models.Model):
     def __str__(self):
         return self.booking_id
         
-
-# class HotelRecommend(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-#     UserPreferences = models.ForeignKey(UserPreferences, on_delete=models.SET_NULL, blank=True, null=True)
-#     hotel_recommend = models.CharField(max_length=200, null=True)
-#     def __str__(self):
-#         return self.hotel_recommend
-
 class WishList(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, blank=True, null=True) 
     hotelID = models.CharField(max_length=200, null=True)
