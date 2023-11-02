@@ -30,7 +30,7 @@ class UserPreferences(models.Model):
 
 class BookingHotel(models.Model):
     booking_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True)
     hotelID = models.CharField(max_length=200, null=True)
     date_booking = models.DateTimeField(auto_now_add=True)
     date_return = models.DateTimeField(null=True, default=None)
@@ -43,7 +43,7 @@ class WishList(models.Model):
     hotelID = models.CharField(max_length=200, null=True)
     saved_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.hotel
+        return self.hotelID
     
 class Rating(models.Model):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
