@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .hotel_recomemdation import requirementbased, random_forest_based, citybased 
+from .hotel_recomemdation import requirementbased, random_forest_based, citybased, random_forest_based1
 from .models import *
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -25,8 +25,11 @@ def register(request):
             user_profile.password = request.POST['password1']  # Lấy giá trị mật khẩu từ biểu mẫu
             user_profile.save()
             return redirect('login')
+        else: 
+            message = "Account already exists, please try again!"
+            return render(request, 'register.html', {'message': message} )
     context ={'form':form}
-    return render(request,'regiter.html',context)
+    return render(request,'register.html',context)
 
 def loginPage(request):
     if request.user.is_authenticated:
@@ -38,7 +41,9 @@ def loginPage(request):
         if user is not None:
             login(request,user)
             return redirect(get_home)
-        else: messages.info(request,'Co gi do chua dung!')
+        else: 
+            message = "Wrong username or password. Please try again!"
+            return render(request, 'login.html', {'message': message})
     context ={}
     return render(request,'login.html',context)
 
@@ -65,9 +70,11 @@ def get_home(request):
         city = 'london'
         number = 4
         features = 'I need a room with free wifi'
-        output = requirementbased(city, number, features)
-        print(output)    # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
-    return render(request, 'home.html', {'username': username}) 
+        output = random_forest_based(city, number, features)
+        print(output) # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
+    
+    context = {'username': username, 'result': output}
+    return render(request, 'home.html', context) 
 
 def recommend_hotels_by_requirement(request):
     # Đoạn logic xử lý yêu cầu của người dùng và gọi hàm ratebased
@@ -87,10 +94,10 @@ def recommend_hotel_by_city(request):
 
 
 def recommend_hotel_by_city_feature(request):
-    city = "london"
-    number = 4
-    features = 'I need a room with free wifi'
-    output = random_forest_based(city, number, features)
+    city = ["london, paris"]
+    number = [4 , 2]
+    features = ['I need a room with free wifi', 'heating']
+    output = random_forest_based1(city, number, features)
     print(output)
     return render(request, 'home.html')
 

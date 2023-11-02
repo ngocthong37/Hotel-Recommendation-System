@@ -1,96 +1,99 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
-  </head>
-  <body>
-    <div class="w-100">
-      {% comment %}========== Header ============{% endcomment %}
-      <header class="box-linear-primary">
-        <h1>Booking App</h1>
-        <div class="box-linear-secondary">
-          <p>Hello</p>
-          <h3>{{ username }}</h3>
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
+</head>
+
+<body>
+  <div class="w-100">
+    {% comment %}========== Header ============{% endcomment %}
+    <header class="box-linear-primary">
+      <h1>Booking App</h1>
+      <div class="box-linear-secondary">
+        <p>Hello</p>
+        <h3>{{ username }}</h3>
+        <div class="sign-in">
+          <a class="sign-in" href="/logout"> Log Out</a>
         </div>
-      </header>
-      <main class="d-flex flex-column">
-        {% comment %}========== News =========== {% endcomment %}
-        <div class="news">
-          <div
-            class="carousel slide"
-            id="hotelCarousel"
-            data-bs-ride="carousel"
-          >
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="container">
-                  <image
-                    src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                  />
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="container">
-                  <image
-                    src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {% comment %} ========= CATEGORY ============ {% endcomment %}
-        <div class="category mb-5">
-          <div class="d-flex justify-content-between p-3">
-            <h4 class="category-title">Hotel Favorites</h4>
-            <a>
-              <span class="category-see-all">see all</span>
-            </a>
-          </div>
-          <div class="row gx-2 align-items-center justify-content-center gap-2">
-            <div
-              class="col-5 hotel-item d-flex align-items-center flex-column gap-2"
-            >
-              <div class="hotel-image">
+      </div>
+    </header>
+    <main class="d-flex flex-column">
+      {% comment %}========== News =========== {% endcomment %}
+      <div class="news">
+        <div class="carousel slide" id="hotelCarousel" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <div class="container">
                 <image
-                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                />
-              </div>
-              <div class="hotel-detail p-2">
-                <h6 class="hotel-name">Hotel name</h6>
-                <span class="hotel-description"
-                  >Wifi, love chair, condom, test chu dai xuong dong co an di
-                  ko</span
-                >
-                <span class="hotel-price">$500</span>
+                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
               </div>
             </div>
-            <div
-              class="col-5 hotel-item d-flex align-items-center flex-column gap-2"
-            >
-              <div class="hotel-image">
+            <div class="carousel-item">
+              <div class="container">
                 <image
-                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
-                />
-              </div>
-              <div class="hotel-detail p-2">
-                <h6 class="hotel-name">Hotel name</h6>
-                <span class="hotel-description"
-                  >Wifi, love chair, condom, test chu dai xuong dong co an di
-                  ko</span
-                >
-                <span class="hotel-price">$500</span>
+                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
               </div>
             </div>
           </div>
         </div>
-      </main>
-    </div>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  </body>
+      </div>
+      {% comment %} ========= CATEGORY ============ {% endcomment %}
+      <div class="category mb-5">
+        <div class="d-flex justify-content-between p-3">
+          <h4 class="category-title">Hotel Favorites</h4>
+          <a>
+            <span class="category-see-all">see all</span>
+          </a>
+        </div>
+        <div class="row gx-2 align-items-center justify-content-center gap-2">
+          {% for hotel in result %}
+          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
+            <div class="hotel-image">
+              <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"/>
+            </div>
+            <div class="hotel-detail p-2">
+              <h6 class="hotel-name">{{ hotel.hotelname }}</h6>
+              <span class="hotel-description">{{ hotel.roomamenities }}</span>
+              <span class="hotel-price">${{ hotel.guests_no }}</span>
+            </div>
+          </div>
+          {% endfor %}
+
+          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
+            <div class="hotel-image">
+              <image
+                src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
+            </div>
+            <div class="hotel-detail p-2">
+              <h6 class="hotel-name">Hotel name</h6>
+              <span class="hotel-description">Wifi, love chair, condom, test chu dai xuong dong co an di
+                ko</span>
+              <span class="hotel-price">$500</span>
+            </div>
+          </div>
+          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
+            <div class="hotel-image">
+              <image
+                src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
+            </div>
+            <div class="hotel-detail p-2">
+              <h6 class="hotel-name">Hotel name</h6>
+              <span class="hotel-description">Wifi, love chair, condom, test chu dai xuong dong co an di
+                ko</span>
+              <span class="hotel-price">$500</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+
 </html>

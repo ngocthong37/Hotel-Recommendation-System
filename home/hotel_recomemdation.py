@@ -240,9 +240,13 @@ def random_forest_based(city, number, features):
             # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
             # predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
             result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(2).to_dict(orient='records')
-            print(result)
-            return json.dumps(result, ensure_ascii=False)
+            # print(result)
+            # return json.dumps(result, ensure_ascii=False)
+            return result
         else:
-            return json.dumps({'error': 'No Hotels Available based on given features'}, ensure_ascii=False)
+            return {'error': 'No Hotels Available based on given features'}
+            # return json.dumps({'error': 'No Hotels Available based on given features'}, ensure_ascii=False)
     else:
         return json.dumps({'error': 'No Hotels Available for the specified city and number of guests'}, ensure_ascii=False)
+    
+

@@ -20,6 +20,9 @@
       <div class="layout">
         <div class="form-container">
           <h1 class="title">Register Booking App</h1>
+          <div>
+            <p id="my-paragraph">{{ message  }}</p>
+          </div>
           <form action="" method="POST">
             {% csrf_token %}
             <div class="form-provider">
@@ -89,5 +92,13 @@
         </div>
       </div>
     </div>
+    <script>
+      const paragraph = document.getElementById('my-paragraph');
+      paragraph.style.display = 'block';
+      // Ẩn thẻ p sau 10 giây
+      setTimeout(function() {
+          paragraph.style.display = 'none';
+      }, 10000); 
+  </script>
   </body>
 </html>
