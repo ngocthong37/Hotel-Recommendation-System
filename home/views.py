@@ -91,16 +91,16 @@ def recommend_hotel_by_city_feature(request):
     number = 4
     features = 'I need a room with free wifi'
     output = random_forest_based(city, number, features)
-    print(output)
+    # print(output)
     return render(request, 'home.html')
 
 def new_booking(request):
     if request.method == 'POST':
-        user_id = request.POST['user']
         hotel_id = request.POST['hotelID']
+        user_id = UserProfile.objects.get(user=request.user)
         create_at = datetime.now()
-        #booking = BookingHotel.objects.create(user_id=user_id, hotelID=hotel_id)
         bookHotel(user_id, hotel_id, create_at)
+        print(user_id)
         return redirect('booking_list')
     else:
         users = User.objects.all()
@@ -113,3 +113,14 @@ def booking_detail(request, booking_id):
 def booking_list(request):
     bookings = BookingHotel.objects.all()
     return render(request, 'booking_list.html', {'bookings': bookings})
+
+def add_booking(request):
+    if request.method == "POST":
+        hotel_id = request.POST.get("hotel_id")
+        user_profile = UserProfile.objects.get(user=request.user)
+        # Tạo một booking mới
+        new_booking = BookingHotel(user=user_profile, hotelID=hotel_id)
+        new_booking.save()
+        return redirect("booking_list")  # Chuyển hướng đến trang danh sách booking sau khi thêm
+
+    return render(request, "add_booking.html")
