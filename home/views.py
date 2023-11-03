@@ -12,11 +12,14 @@ from django.core.exceptions import ObjectDoesNotExist
 
 def search(request):
     if request.method == "POST":
-        print(request.POST['country'])
-        print(request.POST['descriptionHotel'])
-        print(request.POST['city'])
-        print(request.POST['rating'])
-        print(request.POST['numberOf'])
+        country = request.POST['country'] 
+        description_hotel = request.POST['descriptionHotel'] 
+        city = request.POST['city'] 
+        rating = request.POST['rating'] 
+        number_of = request.POST['numberOf']
+        print("in search: ", city, number_of, description_hotel)
+        output = citybased(city)
+        print('out put search: ',output)
     context = {}
     return render(request,'search.html',context)
 
@@ -72,9 +75,9 @@ def get_home(request):
         output = random_forest_based(userPreferences.city, userPreferences.number, userPreferences.feature)
         print(output)
     else:
-        city = 'london'
-        number = 4
-        features = 'I need a room with free wifi'
+        city = 'Paris'
+        number = 2
+        features = 'wifi free'
         output = requirementbased(city, number, features)
         print(output)    # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
     return render(request, 'home.html', {'username': username}) 

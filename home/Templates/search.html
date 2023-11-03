@@ -37,7 +37,7 @@
         class="d-flex flex-column pb-5 pt-3 overflow-auto h-100 container-lg"
         style="background-color: #faf8f8"
       >
-        <form action="" method="POST">
+        <form action="" method="POST" id="searchForm">
           {% csrf_token %}
           <div class="form-group mb-4 px-3">
             <label class="mb-2" for="country">Country</label>
@@ -146,6 +146,45 @@
         </form>
       </main>
     </div>
+    <script>
+      document.addEventListener("submit", function (event) {
+        if (event.target.id === "searchForm") {
+          event.preventDefault();
+
+          var country = document.getElementById("country").value;
+          var city = document.getElementById("city").value;
+          var numberOf = document.getElementById("numberOf").value;
+          var rating;
+          var ratingRadios = document.getElementsByName("rating");
+          for (var i = 0; i < ratingRadios.length; i++) {
+            if (ratingRadios[i].checked) {
+              rating = ratingRadios[i].value;
+              break;
+            }
+          }
+          var descriptionHotel =
+            document.getElementById("descriptionHotel").value;
+          var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0]
+            .value;
+          fetch("{% url 'search' %}", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "X-CSRFToken": csrfToken,
+            },
+            body: `country=${country}&city=${city}&numberOf=${numberOf}&rating=${rating}&descriptionHotel=${descriptionHotel}`,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data); // Handle the response from the server as needed
+              alert("Saved");
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      });
+    </script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
   </body>
 </html>
