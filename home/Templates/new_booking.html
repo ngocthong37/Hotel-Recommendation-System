@@ -11,12 +11,12 @@
     <form method="post">
         {% csrf_token %}
         
-        <label for="user">Người dùng:</label>
+        {% comment %} <label for="user">Người dùng:</label>
         <select name="user" id="user">
             {% for user in users %}
                 <option value="{{ user.id }}">{{ user.username }}</option>
             {% endfor %}
-        </select><br>
+        </select><br> {% endcomment %}
 
         <label for="hotelID">Mã Khách Sạn:</label>
         <input type="text" name="hotelID" id="hotelID"><br>
