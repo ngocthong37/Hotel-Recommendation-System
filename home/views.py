@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from .hotel_recomemdation import requirementbased, random_forest_based, citybased, random_forest_based1
+from .hotel_recomemdation import requirementbased, random_forest_based, citybased
 from .models import *
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.forms import UserCreationForm
