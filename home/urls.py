@@ -14,4 +14,5 @@ urlpatterns = [
     path('booking_list/', views.booking_list, name='booking_list'),
     path('add_wishlist/', views.add_wishlist, name='add_wishlist'),
     path('wishlist/', views.wishlist, name='wishlist'),
+    path('search', views.search, name="search")
 ]   
