@@ -1,5 +1,4 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .hotel_recomemdation import requirementbased, random_forest_based, citybased, random_forest_based1
 from .hotel_recomemdation import requirementbased, random_forest_based, citybased
 from .models import *
 from django.http import HttpResponse,JsonResponse
@@ -8,7 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from.func import *
 from django.core.exceptions import ObjectDoesNotExist
-
+from .hotel_search import *
 # Create your views here.
 
 def register(request):
@@ -65,25 +64,22 @@ def get_home(request):
         print(userPreferences.number)
         print(userPreferences.city)
         print(userPreferences.feature)
-        output = random_forest_based(userPreferences.city, userPreferences.number, userPreferences.feature)
-        print(output)
+        hotel_list = get_hotels_data_by_codes(random_forest_based(userPreferences.city, userPreferences.number, userPreferences.feature))
+        print(hotel_list)
     else:
         city = 'london'
         number = 4
         features = 'I need a room with free wifi'
-        output = random_forest_based(city, number, features)
-        print(output) # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
+        hotel_list = get_hotels_data_by_codes(random_forest_based(city, number, features))
+        print(hotel_list) # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
     
-    context = {'username': username, 'result': output}
+    context = {'username': username, 'result': hotel_list}
     return render(request, 'home.html', context) 
 
 def recommend_hotels_by_requirement(request):
-    # Đoạn logic xử lý yêu cầu của người dùng và gọi hàm ratebased
     city = 'london'
-
     number = 4
     features = 'I need a room with heating'
-
     output = requirementbased(city, number, features)
     print(output)
     # Trả kết quả về template hoặc API response
@@ -98,11 +94,10 @@ def recommend_hotel_by_city(request):
 
 def recommend_hotel_by_city_feature(request):
 
-    city = ["london",'paris']
-    number = [4,2]
-    features = ['I need a room with free wifi', 'I need a room with free wifi']
+    city = "london"
+    number = 4
+    features = 'I need a room with free wifi'
     random_forest_based(city, number, features)
-
     return render(request, 'home.html')
 
 def new_booking(request):
@@ -152,3 +147,8 @@ def wishlist(request):
     user = UserProfile.objects.get(user=request.user) 
     wishlist_items = WishList.objects.filter(user=user)
     return render(request, "wishlist.html", {'wishlist_items': wishlist_items})
+
+def hotel_detail(request,hotelcode):
+    listroom = get_room_in_hotel(hotelcode)
+    context = {'listroom':listroom}
+    return render(request,'hotel_detail.html',context)

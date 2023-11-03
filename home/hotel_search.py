@@ -20,13 +20,11 @@ else:
 
 
 def get_hotels_data_by_codes(hotel_codes):
-    # Lọc các hàng có hotelcode trong danh sách hotel_codes
-    filtered_rows = hotel_price_average[hotel_price_average['hotelcode'].isin(hotel_codes)]
+    filtered_rows = hotel_price_average[hotel_price_average['hotelcode'].isin(hotel_codes)].to_dict(orient='records')
     return filtered_rows
 
 def get_room_in_hotel(hotel_code):
     filtered_rows = hotel_info[hotel_info['hotelcode']==hotel_code]
-    return filtered_rows
+    list_room = filtered_rows[['id','roomtype','onsiterate','ratedescription']].to_dict(orient='records')
+    return list_room
 
-
-print(get_room_in_hotel(59961))

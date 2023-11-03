@@ -58,37 +58,21 @@
               <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"/>
             </div>
             <div class="hotel-detail p-2">
-              <h6 class="hotel-name">{{ hotel.hotelname }}</h6>
-              <span class="hotel-description">{{ hotel.roomamenities }}</span>
-              <span class="hotel-price">${{ hotel.guests_no }}</span>
+              <a href="{% url 'hotel_detail' hotel.hotelcode %}"><h6 class="hotel-name">{{ hotel.hotelname }}</h6></a>
+              <span class="hotel-description">{{ hotel.address }}</span>
+              <div class="stars">
+                {% for i in '12345' %}
+                  {% if i|add:0 <= hotel.starrating %}
+                    <span>★</span>
+                  {% else %}
+                    <span>☆</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <span class="hotel-price">${{ hotel.pricemin }} - ${{hotel.pricemax}}</span>
             </div>
           </div>
           {% endfor %}
-
-          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
-            <div class="hotel-image">
-              <image
-                src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
-            </div>
-            <div class="hotel-detail p-2">
-              <h6 class="hotel-name">Hotel name</h6>
-              <span class="hotel-description">Wifi, love chair, condom, test chu dai xuong dong co an di
-                ko</span>
-              <span class="hotel-price">$500</span>
-            </div>
-          </div>
-          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
-            <div class="hotel-image">
-              <image
-                src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
-            </div>
-            <div class="hotel-detail p-2">
-              <h6 class="hotel-name">Hotel name</h6>
-              <span class="hotel-description">Wifi, love chair, condom, test chu dai xuong dong co an di
-                ko</span>
-              <span class="hotel-price">$500</span>
-            </div>
-          </div>
         </div>
       </div>
     </main>
