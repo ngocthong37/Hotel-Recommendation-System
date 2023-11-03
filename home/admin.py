@@ -4,5 +4,5 @@ from .models import *
 admin.site.register(UserProfile)
 admin.site.register(UserPreferences)
 admin.site.register(BookingHotel)
-
 admin.site.register(WishList)
+admin.site.register(Rating)

@@ -85,7 +85,6 @@ def recommend_hotel_by_city(request):
     print(output)
     return render(request, 'home.html')
 
-
 def recommend_hotel_by_city_feature(request):
     city = "london"
     number = 4
@@ -100,7 +99,6 @@ def new_booking(request):
         user_id = UserProfile.objects.get(user=request.user)
         create_at = datetime.now()
         bookHotel(user_id, hotel_id, create_at)
-        print(user_id)
         return redirect('booking_list')
     else:
         users = User.objects.all()
@@ -111,19 +109,9 @@ def booking_detail(request, booking_id):
     return render(request, 'booking_detail.html', {'booking': booking})
 
 def booking_list(request):
-    bookings = BookingHotel.objects.all()
+    user = UserProfile.objects.get(user=request.user)
+    bookings = BookingHotel.objects.filter(user=user)
     return render(request, 'booking_list.html', {'bookings': bookings})
-
-def add_booking(request):
-    if request.method == "POST":
-        hotel_id = request.POST.get("hotel_id")
-        user_profile = UserProfile.objects.get(user=request.user)
-        # Tạo một booking mới
-        new_booking = BookingHotel(user=user_profile, hotelID=hotel_id)
-        new_booking.save()
-        return redirect("booking_list")  # Chuyển hướng đến trang danh sách booking sau khi thêm
-
-    return render(request, "add_booking.html")
 
 def add_wishlist(request):
     if request.method == "POST":
@@ -141,3 +129,23 @@ def wishlist(request):
     user = UserProfile.objects.get(user=request.user) 
     wishlist_items = WishList.objects.filter(user=user)
     return render(request, "wishlist.html", {'wishlist_items': wishlist_items})
+
+def rate_hotel(request):
+    if request.method == 'POST':
+        hotel_id = request.POST.get('hotel_id')
+        value = request.POST.get('value')
+        user = UserProfile.objects.get(user=request.user)
+
+        rating = Rating.objects.create(
+            user=user,
+            hotelID=hotel_id,
+            value=value
+        )
+
+        return redirect('rating_list')
+
+    return render(request, 'rate_hotel.html')
+
+def rating_list(request):
+    ratings = Rating.objects.all()
+    return render(request, 'rating_list.html', {'ratings': ratings})
