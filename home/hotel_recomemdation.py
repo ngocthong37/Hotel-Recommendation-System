@@ -1,38 +1,17 @@
 import numpy as np
 import pandas as pd
-import json
+import math,os,nltk, json
 import matplotlib.pyplot as plt
-from keras.models import Sequential
-from keras.layers import LSTM
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
 import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
-from sklearn import svm
-from nltk.corpus import stopwords 
+from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize 
-from xgboost import XGBClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.tree import DecisionTreeClassifier
-from keras.callbacks import EarlyStopping
-import math
-import os
-import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.metrics.pairwise import linear_kernel, cosine_similarity
-from nltk.stem.snowball import SnowballStemmer
-from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-
-import csv
 
 # Initialize the TF-IDF vectorizer
 tfidf_vectorizer = TfidfVectorizer()
