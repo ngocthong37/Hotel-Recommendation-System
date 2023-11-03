@@ -80,8 +80,10 @@ def get_home(request):
 def recommend_hotels_by_requirement(request):
     # Đoạn logic xử lý yêu cầu của người dùng và gọi hàm ratebased
     city = 'london'
+
     number = 4
     features = 'I need a room with heating'
+
     output = requirementbased(city, number, features)
     print(output)
     # Trả kết quả về template hoặc API response
@@ -95,11 +97,12 @@ def recommend_hotel_by_city(request):
 
 
 def recommend_hotel_by_city_feature(request):
-    city = "london"
-    number = 4
-    features = 'I need a room with free wifi'
-    output = random_forest_based(city, number, features)
-    # print(output)
+
+    city = ["london",'paris']
+    number = [4,2]
+    features = ['I need a room with free wifi', 'I need a room with free wifi']
+    random_forest_based(city, number, features)
+
     return render(request, 'home.html')
 
 def new_booking(request):
