@@ -72,7 +72,6 @@ del hotel_details['zipcode']
 
 hotel_details=hotel_details.dropna()
 hotel_rooms=hotel_rooms.dropna()
-
 hotel_details.drop_duplicates(subset='hotelid',keep=False,inplace=True)
 hotel=pd.merge(hotel_rooms,hotel_details,left_on='hotelcode',right_on='hotelid',how='inner')
 
@@ -82,13 +81,11 @@ selected_hotel_columns = hotel_details[['hotelid', 'hotelname']]
 hotel_all = pd.merge(hotel_cost, selected_hotel_columns, left_on='hotelcode', right_on='hotelid', how='inner')
 # hotel_all.to_csv('example.csv', index=False)
 
-
 def citybased(city):
     hotel['city'] = hotel['city'].str.lower()
     citybase = hotel[hotel['city'] == city.lower()]
     citybase = citybase.sort_values(by='starrating', ascending=False)
     citybase.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
-    
     if not citybase.empty:
         hname = citybase[['hotelname', 'starrating', 'address', 'roomamenities', 'ratedescription']]
         result = hname.head().to_dict(orient='records')
@@ -260,7 +257,6 @@ def ratebased(city,number,features):
 def random_forest_based(city_list, number_list, features_list):
     hotel['city'] = hotel['city'].str.lower()
     hotel['roomamenities'] = hotel['roomamenities'].str.lower()
-
     # Chuyển đổi city, number, và features thành danh sách
     city_list = [city.lower() for city in city_list]
     number_list = [number for number in number_list]
@@ -302,3 +298,4 @@ def random_forest_based(city_list, number_list, features_list):
             results.append("No Hotels Available based on given features")
     print(results)
     return results
+

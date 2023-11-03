@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Popup Example</title>
+    <style>
+        /* CSS cho popup */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="popup" id="popup">
+        <h2>Thông báo</h2>
+        <p id="popup-message">Nội dung thông báo</p>
+        <button id="close-popup">Đóng</button>
+    </div>
+
+    <!-- JavaScript cho popup -->
+    <script>
+        const popup = document.getElementById('popup');
+        const popupMessage = document.getElementById('popup-message');
+        const closePopupButton = document.getElementById('close-popup');
+
+        // Hiển thị popup với nội dung cụ thể
+        function showPopup(message) {
+            popupMessage.textContent = message;
+            popup.style.display = 'block';
+        }
+
+        // Đóng popup
+        closePopupButton.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

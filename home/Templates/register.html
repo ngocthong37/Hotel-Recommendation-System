@@ -20,6 +20,9 @@
       <div class="layout">
         <div class="form-container">
           <h1 class="title">Register Booking App</h1>
+          <div>
+            <p id="my-paragraph">{{ message  }}</p>
+          </div>
           <form action="" method="POST">
             {% csrf_token %}
             <div class="form-provider">
@@ -33,10 +36,44 @@
               </div>
               <div class="form-input">
                 <input
+                  type="email"
+                  placeholder="Email"
+                  id="email"
+                  name="email"
+                />
+              </div>
+              <div class="form-input">
+                <input
+                  type="text"
+                  placeholder="First name"
+                  id="first_name"
+                  name="first_name"
+                />
+              </div>
+            </div>
+            <div class="form-input">
+              <input
+                type="text"
+                placeholder="Last name"
+                id="last_name"
+                name="last_name"
+              />
+            </div>
+              <div class="form-input">
+                <input
                   type="password"
                   placeholder="Password"
-                  id="password"
-                  name="password"
+                  id="password1"
+                  name="password1"
+                />
+              </div>
+              <div class="form-input">
+                <input
+                  type="password"
+                  placeholder="Re-Enter Password"
+
+                  id="password2"
+                  name="password2"
                 />
               </div>
               <div class="sign-in">
@@ -55,5 +92,13 @@
         </div>
       </div>
     </div>
+    <script>
+      const paragraph = document.getElementById('my-paragraph');
+      paragraph.style.display = 'block';
+      // Ẩn thẻ p sau 10 giây
+      setTimeout(function() {
+          paragraph.style.display = 'none';
+      }, 10000); 
+  </script>
   </body>
 </html>
