@@ -122,12 +122,9 @@ def booking_list(request):
 def add_wishlist(request):
     if request.method == "POST":
         hotel_id = request.POST.get("hotel_id")
-        user = UserProfile.objects.get(user=request.user)  # Lấy UserProfile của người dùng đang đăng nhập
-
-        # Lồng đoạn code vào trong view
-        wish_list_item, created = WishList.objects.get_or_create(user=user, hotelID=hotel_id)
-
-        return redirect("wishlist")  # Chuyển hướng đến trang wishlist sau khi thêm
+        user = UserProfile.objects.get(user=request.user)
+        addWishList(user, hotel_id)
+        return redirect("wishlist")
 
     return render(request, "add_wishlist.html")
 
@@ -147,12 +144,7 @@ def rate_hotel(request):
         hotel_id = request.POST.get('hotel_id')
         value = request.POST.get('value')
         user = UserProfile.objects.get(user=request.user)
-
-        rating = Rating.objects.create(
-            user=user,
-            hotelID=hotel_id,
-            value=value
-        )
+        rateHotel(user, hotel_id, value)
 
         return redirect('rating_list')
 
