@@ -147,8 +147,16 @@ def wishlist(request):
 
 def hotel_detail(request,hotelcode):
     listroom = get_room_in_hotel(hotelcode)
-    context = {'listroom':listroom}
-    return render(request,'hotel_detail.html',context)
+    user = UserProfile.objects.get(user=request.user)
+    wishlist_items = set(WishList.objects.filter(user=user).values_list('hotelID', flat=True).distinct())
+    output = []
+    
+    for room in listroom:
+        room['isWishList'] = str(room['id']) in wishlist_items
+        output.append(room)
+
+    context = {'listroom': output}
+    return render(request, 'hotel_detail.html', context)
 
 def rate_hotel(request):
     if request.method == 'POST':

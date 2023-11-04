@@ -11,32 +11,18 @@
   <body style="background-color: #faf8f8">
     <div class="w-100">
       {% comment %}========== Header ============{% endcomment %}
-      <header
-        class="header-search d-flex justify-content-center flex-column py-5 px-3"
-      >
+      <header class="header-search d-flex justify-content-center flex-column py-5 px-3">
         <div class="d-flex align-items-center gap-4">
           <a href="/home">
             <span class="d-flex justify-content-center align-items-center"
-              ><svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="#66BA7A"
-                class="bi bi-caret-left"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z"
-                /></svg
+              ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#66BA7A" class="bi bi-caret-left" viewBox="0 0 16 16">
+                <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" /></svg
             ></span>
           </a>
           <h1>Filter hotel</h1>
         </div>
       </header>
-      <main
-        class="d-flex flex-column pb-5 pt-3 overflow-auto h-100 container-lg"
-        style="background-color: #faf8f8"
-      >
+      <main class="d-flex flex-column pb-5 pt-3 overflow-auto h-100 container-lg" style="background-color: #faf8f8">
         <form action="" method="POST" id="searchForm">
           {% csrf_token %}
           <div class="form-group mb-4 px-3">
@@ -73,117 +59,78 @@
             <label>Rating</label>
             <div class="d-flex justify-content-center align-items-center">
               <fieldset>
-                <span class="star-cb-group">
-                  <input
-                    type="radio"
-                    id="rating-5"
-                    name="rating"
-                    value="5"
-                  /><label for="rating-5">5</label>
-                  <input
-                    type="radio"
-                    id="rating-4"
-                    name="rating"
-                    value="4"
-                    checked="checked"
-                  /><label for="rating-4">4</label>
-                  <input
-                    type="radio"
-                    id="rating-3"
-                    name="rating"
-                    value="3"
-                  /><label for="rating-3">3</label>
-                  <input
-                    type="radio"
-                    id="rating-2"
-                    name="rating"
-                    value="2"
-                  /><label for="rating-2">2</label>
-                  <input
-                    type="radio"
-                    id="rating-1"
-                    name="rating"
-                    value="1"
-                  /><label for="rating-1">1</label>
-                  <input
-                    type="radio"
-                    id="rating-0"
-                    name="rating"
-                    value="0"
-                    class="star-cb-clear"
-                  /><label for="rating-0">0</label>
-                </span>
+                <span class="star-cb-group"> <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label> <input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label> <input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label> <input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label> <input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label> <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label> </span>
               </fieldset>
             </div>
           </div>
           <div class="form-group mb-4 px-3">
             <label for="descriptionHotel">Description hotel</label>
-            <textarea
-              class="form-control"
-              id="descriptionHotel"
-              name="descriptionHotel"
-              rows="3"
-            ></textarea>
+            <textarea class="form-control" id="descriptionHotel" name="descriptionHotel" rows="3"></textarea>
           </div>
-          <div
-            class="d-flex justify-content-center align-items-center w-100 btn-group gap-3 px-3"
-          >
-            <button
-              class="btn btn-custom w-25 rounded-4 btn-outline-dark"
-              type="submit"
-              name="register"
-            >
-              Cancel
-            </button>
-            <button
-              class="btn btn-success btn-custom w-25 rounded-4"
-              type="submit"
-              name="register"
-            >
-              Submit
-            </button>
+          <div class="d-flex justify-content-center align-items-center w-100 btn-group gap-3 px-3">
+            <button class="btn btn-custom w-25 rounded-4 btn-outline-dark" type="submit" name="register">Cancel</button>
+            <button class="btn btn-success btn-custom w-25 rounded-4" type="submit" name="register">Submit</button>
           </div>
         </form>
+        <div class="row gx-2 align-items-center justify-content-center gap-2">
+          {% for hotel in result %}
+          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
+            <div class="hotel-image">
+              <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
+            </div>
+            <div class="hotel-detail p-2">
+              <a href="{% url 'hotel_detail' hotel.hotelcode %}"><h6 class="hotel-name">{{ hotel.hotelname }}</h6></a>
+              <span class="hotel-description">{{ hotel.address }}</span>
+              <div class="stars">
+                {% for i in '12345' %} {% if i|add:0 <= hotel.starrating %}
+                <span>★</span>
+                {% else %}
+                <span>☆</span>
+                {% endif %} {% endfor %}
+              </div>
+              <span class="hotel-price">${{ hotel.pricemin }} - ${{hotel.pricemax}}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
       </main>
     </div>
     <script>
-      document.addEventListener("submit", function (event) {
-        if (event.target.id === "searchForm") {
-          event.preventDefault();
+      document.addEventListener('submit', function (event) {
+        if (event.target.id === 'searchForm') {
+          event.preventDefault()
 
-          var country = document.getElementById("country").value;
-          var city = document.getElementById("city").value;
-          var numberOf = document.getElementById("numberOf").value;
-          var rating;
-          var ratingRadios = document.getElementsByName("rating");
+          var country = document.getElementById('country').value
+          var city = document.getElementById('city').value
+          var numberOf = document.getElementById('numberOf').value
+          var rating
+          var ratingRadios = document.getElementsByName('rating')
           for (var i = 0; i < ratingRadios.length; i++) {
             if (ratingRadios[i].checked) {
-              rating = ratingRadios[i].value;
-              break;
+              rating = ratingRadios[i].value
+              break
             }
           }
-          var descriptionHotel =
-            document.getElementById("descriptionHotel").value;
-          var csrfToken = document.getElementsByName("csrfmiddlewaretoken")[0]
-            .value;
+          var descriptionHotel = document.getElementById('descriptionHotel').value
+          var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value
           fetch("{% url 'search' %}", {
-            method: "POST",
+            method: 'POST',
             headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              "X-CSRFToken": csrfToken,
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'X-CSRFToken': csrfToken
             },
-            body: `country=${country}&city=${city}&numberOf=${numberOf}&rating=${rating}&descriptionHotel=${descriptionHotel}`,
+            body: `city=${city}&numberOf=${numberOf}&rating=${rating}&descriptionHotel=${descriptionHotel}`
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log(data); // Handle the response from the server as needed
-              alert("Saved");
+              console.log(data) // Handle the response from the server as needed
+              alert('Saved')
             })
             .catch((error) => {
-              console.error("Error:", error);
-            });
+              console.error('Error:', error)
+            })
         }
-      });
+      })
     </script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
   </body>
