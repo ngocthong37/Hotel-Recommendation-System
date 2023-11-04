@@ -8,6 +8,7 @@ from django.contrib import messages
 from .func import *
 from django.core.exceptions import ObjectDoesNotExist
 from .hotel_search import *
+import random
 # Create your views here.
 
 def search(request):
@@ -175,8 +176,25 @@ def hotel_detail(request,hotelcode):
     user = UserProfile.objects.get(user=request.user)
     wishlist_items = set(WishList.objects.filter(user=user).values_list('roomId', flat=True).distinct())
     output = []
+    hotel_room_image_path = os.path.join(current_directory, 'data-set', 'image_room.csv')
     
+    if os.path.exists(hotel_room_image_path):
+        hotel_rooms_image = pd.read_csv(hotel_room_image_path, delimiter=',')
+    else:
+        print("Tệp tin 'image_room.csv' không tồn tại.")
+        
     for room in listroom:
+         # Kiểm tra xem DataFrame hotel_rooms_image có dữ liệu không
+        if not hotel_rooms_image.empty:
+            # Chọn ngẫu nhiên một dòng từ DataFrame hotel_rooms_image
+            random_image_row = random.choice(hotel_rooms_image.index)
+            random_image_link = hotel_rooms_image.loc[random_image_row, 'image']
+        else:
+            # Nếu DataFrame trống rỗng, sử dụng một liên kết hình ảnh mặc định
+            random_image_link = 'default_image_link.jpg'
+
+        # Gán random_image_link vào thuộc tính 'image' của room
+        room['image'] = random_image_link
         room['isWishList'] = str(room['id']) in wishlist_items
         output.append(room)
 
