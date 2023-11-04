@@ -26,16 +26,6 @@
         <form action="" method="POST" id="searchForm">
           {% csrf_token %}
           <div class="form-group mb-4 px-3">
-            <label class="mb-2" for="country">Country</label>
-            <select class="form-control" id="country" name="country">
-              <option>Germany</option>
-              <option>Italy</option>
-              <option>Ireland</option>
-              <option>Sweden</option>
-              <option>Denmark</option>
-            </select>
-          </div>
-          <div class="form-group mb-4 px-3">
             <label class="mb-2" for="city">City</label>
             <select class="form-control" id="city" name="city">
               <option>Bansko</option>
@@ -55,14 +45,6 @@
               <option>5</option>
             </select>
           </div>
-          <div class="w-100 d-flex flex-column px-3">
-            <label>Rating</label>
-            <div class="d-flex justify-content-center align-items-center">
-              <fieldset>
-                <span class="star-cb-group"> <input type="radio" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label> <input type="radio" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label> <input type="radio" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label> <input type="radio" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label> <input type="radio" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label> <input type="radio" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label> </span>
-              </fieldset>
-            </div>
-          </div>
           <div class="form-group mb-4 px-3">
             <label for="descriptionHotel">Description hotel</label>
             <textarea class="form-control" id="descriptionHotel" name="descriptionHotel" rows="3"></textarea>
@@ -73,7 +55,7 @@
           </div>
         </form>
         <div class="row gx-2 align-items-center justify-content-center gap-2">
-          {% for hotel in result %}
+          {% for hotel in hotelList %}
           <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
             <div class="hotel-image">
               <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
@@ -95,43 +77,6 @@
         </div>
       </main>
     </div>
-    <script>
-      document.addEventListener('submit', function (event) {
-        if (event.target.id === 'searchForm') {
-          event.preventDefault()
-
-          var country = document.getElementById('country').value
-          var city = document.getElementById('city').value
-          var numberOf = document.getElementById('numberOf').value
-          var rating
-          var ratingRadios = document.getElementsByName('rating')
-          for (var i = 0; i < ratingRadios.length; i++) {
-            if (ratingRadios[i].checked) {
-              rating = ratingRadios[i].value
-              break
-            }
-          }
-          var descriptionHotel = document.getElementById('descriptionHotel').value
-          var csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value
-          fetch("{% url 'search' %}", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'X-CSRFToken': csrfToken
-            },
-            body: `city=${city}&numberOf=${numberOf}&rating=${rating}&descriptionHotel=${descriptionHotel}`
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log(data) // Handle the response from the server as needed
-              alert('Saved')
-            })
-            .catch((error) => {
-              console.error('Error:', error)
-            })
-        }
-      })
-    </script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
   </body>
 </html>

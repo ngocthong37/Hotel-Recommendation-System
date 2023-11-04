@@ -138,7 +138,7 @@ def requirementbased(city,number,features):
     reqbased['similarity']=cos
     reqbased=reqbased.sort_values(by='similarity',ascending=False)
     reqbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    result = reqbased[['hotelcode']].head(10).to_list()
+    result = reqbased['hotelcode'].head(10).to_list()
     return result
 
 def ratebased(city,number,features):

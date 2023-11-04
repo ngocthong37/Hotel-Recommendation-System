@@ -12,14 +12,16 @@ from .hotel_search import *
 
 def search(request):
     if request.method == "POST":
-        country = request.POST['country'] 
         description_hotel = request.POST['descriptionHotel'] 
         city = request.POST['city'] 
-        rating = request.POST['rating'] 
         number_of = int(request.POST['numberOf'])
         print("in search: ", city, number_of, description_hotel)
         test = requirementbased(city,number_of,description_hotel)
         print('out put search: ',test)
+        hotelList = get_hotels_data_by_codes(test)
+        print(hotelList)
+        context = {'hotelList': hotelList}
+        return render(request, 'search.html', context)
     context = {}
     return render(request,'search.html',context)
 
