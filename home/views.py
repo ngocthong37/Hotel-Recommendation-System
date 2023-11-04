@@ -121,15 +121,30 @@ def get_home(request):
 #     # print(output)
 #     return render(request, 'home.html')
 
-def new_booking(request, roomid):
+# def new_booking(request, roomid):
+#     if not request.user.is_authenticated:
+#         return redirect('login') 
+#     roomId = roomid
+#     userProfile = UserProfile.objects.get(user=request.user)
+#     create_at = datetime.now()
+#     day_in = datetime.strptime('04/11/2023', "%d/%m/%Y")
+#     day_out = datetime.strptime('08/11/2023', "%d/%m/%Y")
+#     bookHotel(userProfile, roomId, create_at,day_in,day_out)
+#     user = UserProfile.objects.get(user=request.user)
+#     bookings = BookingHotel.objects.filter(user=user)
+#     userPreferences = getUserPreferencesByRoom(roomid)
+#     create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2],50)
+#     return render(request, 'booking_list.html', {'bookings': bookings})
+
+def new_booking(request, roomid, dayin, dayout):
     if not request.user.is_authenticated:
         return redirect('login') 
-    hotel_id = roomid
+    roomId = roomid
     userProfile = UserProfile.objects.get(user=request.user)
     create_at = datetime.now()
-    day_in = datetime.strptime('04/11/2023', "%d/%m/%Y")
-    day_out = datetime.strptime('08/11/2023', "%d/%m/%Y")
-    bookHotel(userProfile, hotel_id, create_at,day_in,day_out)
+    day_in = datetime.strptime(dayin, "%Y-%m-%d").date()
+    day_out =  datetime.strptime(dayout, "%Y-%m-%d").date()
+    bookHotel(userProfile, roomId, create_at,day_in,day_out)
     user = UserProfile.objects.get(user=request.user)
     bookings = BookingHotel.objects.filter(user=user)
     userPreferences = getUserPreferencesByRoom(roomid)
@@ -197,7 +212,6 @@ def hotel_detail(request,hotelcode):
         room['image'] = random_image_link
         room['isWishList'] = str(room['id']) in wishlist_items
         output.append(room)
-
     context = {'listroom': output}
     return render(request, 'hotel_detail.html', context)
 

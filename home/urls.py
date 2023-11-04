@@ -16,5 +16,5 @@ urlpatterns = [
     path('rate_hotel/', views.rate_hotel, name='rate_hotel'),
     path('rating_list/', views.rating_list, name='rating_list'),
     path('add_wishlist/<int:roomid>', views.add_wishlist, name='add_wishlist'),
-    path('new_booking/<int:roomid>', views.new_booking, name='new_booking'),
+    path('new_booking/<int:roomid>/<str:dayin>/<str:dayout>', views.new_booking, name='new_booking'),
 ]   
