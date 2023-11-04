@@ -15,4 +15,7 @@ urlpatterns = [
     path('add-wishlist/', views.add_wishlist, name='add_wishlist'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('search', views.search, name="search")
+    path('hotel/<int:hotelcode>', views.hotel_detail, name='hotel_detail'),
+    path('rate_hotel/', views.rate_hotel, name='rate_hotel'),
+    path('rating_list/', views.rating_list, name='rating_list'),
 ]   
