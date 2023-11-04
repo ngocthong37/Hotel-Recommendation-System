@@ -28,3 +28,9 @@ def get_room_in_hotel(hotel_code):
     list_room = filtered_rows[['id','roomtype','onsiterate','ratedescription']].to_dict(orient='records')
     return list_room
 
+def get_hotelcode_by_room(roomid):
+    filtered_rows = hotel_info[hotel_info['id']==roomid]
+    hotelId = filtered_rows['hotelcode'].to_list()
+    rs = hotelId[0]
+    return rs
+
