@@ -16,10 +16,10 @@ def search(request):
         description_hotel = request.POST['descriptionHotel'] 
         city = request.POST['city'] 
         rating = request.POST['rating'] 
-        number_of = request.POST['numberOf']
+        number_of = int(request.POST['numberOf'])
         print("in search: ", city, number_of, description_hotel)
-        output = citybased(city)
-        print('out put search: ',output)
+        test = requirementbased(city,number_of,description_hotel)
+        print('out put search: ',test)
     context = {}
     return render(request,'search.html',context)
 
