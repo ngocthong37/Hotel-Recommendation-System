@@ -26,7 +26,7 @@ def search(request):
             create_user_preference(user_profile,city,number_of,description_hotel)
         hotelList = get_hotels_data_by_codes(output)
         print(hotelList)
-        context = {'hotelList': hotelList}
+        context = {'hotelList': hotelList, "city": city, "descriptionHotel": description_hotel, "numberOf": number_of}
         return render(request, 'search.html', context)
     context = {}
     return render(request,'search.html',context)

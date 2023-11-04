@@ -27,22 +27,16 @@
           {% csrf_token %}
           <div class="form-group mb-4 px-3">
             <label class="mb-2" for="city">City</label>
-            <select class="form-control" id="city" name="city">
-              <option>Bansko</option>
-              <option>Schmalkalden</option>
-              <option>Paris</option>
-              <option>Kos Island</option>
-              <option>Paestum</option>
-            </select>
+            <input class="form-control" id="city" name="city" value="{{city}}" />
           </div>
           <div class="form-group mb-4 px-3">
             <label class="mb-2" for="numberOf">Number of people</label>
             <select class="form-control" id="numberOf" name="numberOf">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+              <option value="1" {% if numberOf == 1 %} selected {% endif %}>1</option>
+              <option value="2" {% if numberOf == 2 %} selected {% endif %}>2</option>
+              <option value="3" {% if numberOf == 3 %} selected {% endif %}>3</option>
+              <option value="4" {% if numberOf == 4 %} selected {% endif %}>4</option>
+              <option value="5" {% if numberOf == 5 %} selected {% endif %}>5</option>
             </select>
           </div>
           <div class="form-group mb-4 px-3">
@@ -54,7 +48,7 @@
             <button class="btn btn-success btn-custom w-25 rounded-4" type="submit" name="register">Submit</button>
           </div>
         </form>
-        <div class="row gx-2 align-items-center justify-content-center gap-2">
+        <div class="row gx-2 align-items-center justify-content-center gap-2 mt-5">
           {% for hotel in hotelList %}
           <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
             <div class="hotel-image">
@@ -77,6 +71,10 @@
         </div>
       </main>
     </div>
+    <script >
+      console.log("{{descriptionHotel}}")
+      document.getElementById("descriptionHotel").value = "{{descriptionHotel}}"
+    </script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
   </body>
 </html>
