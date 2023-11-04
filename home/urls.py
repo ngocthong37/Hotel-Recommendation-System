@@ -10,7 +10,6 @@ urlpatterns = [
     path('logout/', views.logoutPage, name="logout"),
     path('test', views.recommend_hotel_by_city_feature),
     path('booking_detail/<int:booking_id>/', views.booking_detail, name='booking_detail'),
-    path('booking_list/', views.booking_list, name='booking_list'),
     path('booking-list/', views.booking_list, name='booking_list'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('search', views.search, name="search"),
