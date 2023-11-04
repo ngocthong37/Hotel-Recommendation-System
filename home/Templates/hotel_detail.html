@@ -1,83 +1,62 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hotel Detail</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/hotelDetail.css' %}" />
+  </head>
 
-<head>
-  {% load static %}
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hotel Detail</title>
-  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
-</head>
-
-<body>
-  <div class="w-100">
-    {% comment %}========== Header ============{% endcomment %}
-    <header class="box-linear-primary">
-      <h1>Booking App</h1>
-    </header>
-    <main class="d-flex flex-column">
-      {% comment %}========== News =========== {% endcomment %}
-      <div class="news">
-        <div class="carousel slide" id="hotelCarousel" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="container">
-                <image
-                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
-              </div>
-            </div>
-            <div class="carousel-item">
-              <div class="container">
-                <image
-                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% comment %} ========= CATEGORY ============ {% endcomment %}
-      <div class="category mb-5">
-        <div class="d-flex justify-content-between p-3">
-          <h4 class="category-title">Hotel Favorites</h4>
-          <a>
-            <span class="category-see-all">see all</span>
+  <body>
+    <div class="w-100">
+      {% comment %}========== Header ============{% endcomment %}
+      <header class="header d-flex justify-content-center flex-column py-5 px-3">
+        <div class="d-flex align-items-center gap-4">
+          <a href="/home">
+            <span class="d-flex justify-content-center align-items-center"
+              ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#66BA7A" class="bi bi-caret-left" viewBox="0 0 16 16">
+                <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" /></svg
+            ></span>
           </a>
+          <h1>{{ hotel.hotelname }}</h1>
         </div>
-        <div class="row gx-2 align-items-center justify-content-center gap-2">
-          {% for room in listroom %}
-          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
-            <div class="hotel-image">
-              <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"/>
+      </header>
+      <main class="d-flex flex-column pt-5">
+        {% comment %} ========= CATEGORY ============ {% endcomment %}
+        <div class="category mb-5">
+          <div class="row gx-2 align-items-center justify-content-center gap-2">
+            {% for room in listroom %}
+            <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
+              <div class="hotel-image">
+                <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
+              </div>
+              <div class="hotel-detail p-2">
+                <h6 class="hotel-name">{{ room.roomtype }}</h6>
+                <span class="hotel-description">{{ room.ratedescription }}</span>
+                <span class="hotel-price">${{ room.onsiterate}}</span>
+              </div>
+              <div class="detail-room-btn">
+                <button class="btn btn-success btn-booking" type="submit" name="register">
+                  <a href="{% url 'new_booking' room.id %}">Book this room</a>
+                </button>
+                <button class="btn btn-custom" type="submit" name="register">
+                  {% if room.isWishList %}
+                  <a href="{% url 'add_wishlist' room.id %}"> <img src="{% static 'icon/heart-full.png' %}" style="width: 24px; height: 24px" /></a>
+                  {% else %}
+                  <a href="{% url 'add_wishlist' room.id %}">
+                    <img src="{% static 'icon/heart-out-line.svg' %}" />
+                  </a>
+                  {% endif %}
+                </button>
+              </div>
             </div>
-            <div class="hotel-detail p-2">
-              <h6 class="hotel-name">{{ room.roomtype }}</h6>
-              <span class="hotel-description">{{ room.ratedescription }}</span>
-              <span class="hotel-price">${{ room.onsiterate}}</span>
-            </div>
-            <div>
-              <button
-                class="btn btn-success btn-custom"
-                type="submit"
-                name="register"
-              >
-              <a href="{% url 'new_booking' room.id %}">Book this room</a>
-              </button>
-              <button
-                class="btn btn-success btn-custom"
-                type="submit"
-                name="register"
-              >
-                <a href="{% url 'add_wishlist' room.id %}">Add to wishlist</a>
-              </button>
-            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
-      </div>
-    </main>
-  </div>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-</body>
-
+      </main>
+    </div>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
 </html>
