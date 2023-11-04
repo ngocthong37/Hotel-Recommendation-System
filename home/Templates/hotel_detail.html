@@ -42,13 +42,13 @@
               <span class="hotel-price">${{ room.onsiterate}}</span>
             </div>
             <div class="detail-room-btn">
-              <button class="btn btn-success btn-booking" id="showPopupButton">Book this room</button>
+              <button class="btn btn-success showPopupButton" data-roomid="{{ room.id }}">Book this room</button>
               <div id="popup" class="popup">
                 <span class="close" id="closePopupButton">&times;</span>
                 <p>Chọn khoảng thời gian:</p>
                 <input type="date" id="dayin" name="dayin">
                 <input type="date" id="dayout" name="dayout">
-                <button class="btn btn-success btn-booking" type="button" name="book"
+                <button class="btn btn-success btn-booking" type="button" name="book" data-room="0" id="booking-button"
                   onclick="redirectToNewBooking()">Book this room</button>
                 </form>
               </div>
@@ -71,19 +71,29 @@
   </div>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <script>
-    document.getElementById("showPopupButton").addEventListener("click", function () {
-      document.getElementById("popup").style.display = "block";
-    });
+    const popup = document.getElementById("popup")
     document.getElementById("closePopupButton").addEventListener("click", function () {
       document.getElementById("popup").style.display = "none";
     });
+    // Lấy danh sách tất cả các nút "Book this room"
+    var bookButtons = document.querySelectorAll('.showPopupButton');
+    bookButtons.forEach(function(button) {
+      button.addEventListener("click", function () {
+        var roomID = button.getAttribute('data-roomid');
+        var bookingButton = document.getElementById('booking-button')
+        bookingButton.setAttribute('data-room', `${roomID}`)
+        popup.style.display = "block";
+      });
+    })
   </script>
   <script>
     function redirectToNewBooking() {
       var dayin = document.getElementById("dayin").value;
       var dayout = document.getElementById("dayout").value;
-      var url = "{% url 'new_booking' room.id dayin dayout %}";
-      window.location.href = url;
+      var bookingButton = document.getElementById('booking-button')
+      var roomId = bookingButton.getAttribute('data-room');
+      var url = "/new_booking/" + roomID + "/" + dayin + "/" + dayout; 
+      window.location.href = url; 
     }
   </script>
   <script>
