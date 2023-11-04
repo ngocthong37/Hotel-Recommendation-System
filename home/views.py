@@ -15,10 +15,8 @@ def search(request):
         return redirect('login') 
     user_profile = UserProfile.objects.get(user=request.user) 
     if request.method == "POST":
-        country = request.POST['country'] 
         description_hotel = request.POST['descriptionHotel'] 
         city = request.POST['city'] 
-        rating = request.POST['rating'] 
         number_of = int(request.POST['numberOf'])
         print("in search: ", city, number_of, description_hotel)
         if number_of is None and description_hotel is None:
@@ -26,9 +24,12 @@ def search(request):
         else:
             output = requirementbased(city,number_of,description_hotel)
             create_user_preference(user_profile,city,number_of,description_hotel)
-    #    hotelList = (get_hotels_data_by_codes(output))
-    # context = {'hotelList': hotelList}
-    return render(request,'search.html')
+        hotelList = get_hotels_data_by_codes(output)
+        print(hotelList)
+        context = {'hotelList': hotelList}
+        return render(request, 'search.html', context)
+    context = {}
+    return render(request,'search.html',context)
 
 def register(request):
     if request.user.is_authenticated:
@@ -169,8 +170,16 @@ def hotel_detail(request,hotelcode):
     if not request.user.is_authenticated:
         return redirect('login') 
     listroom = get_room_in_hotel(hotelcode)
-    context = {'listroom':listroom}
-    return render(request,'hotel_detail.html',context)
+    user = UserProfile.objects.get(user=request.user)
+    wishlist_items = set(WishList.objects.filter(user=user).values_list('hotelID', flat=True).distinct())
+    output = []
+    
+    for room in listroom:
+        room['isWishList'] = str(room['id']) in wishlist_items
+        output.append(room)
+
+    context = {'listroom': output}
+    return render(request, 'hotel_detail.html', context)
 
 def rate_hotel(request):
     if not request.user.is_authenticated:
