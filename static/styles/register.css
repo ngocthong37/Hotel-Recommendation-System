@@ -95,7 +95,7 @@ h1 {
   color: #00a55d;
   text-decoration-color: #00a55d;
   margin-bottom: 24px;
-  display: inline;
+  /* display: inline-block; */
   text-align: right;
 }
 
