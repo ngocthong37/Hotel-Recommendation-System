@@ -10,6 +10,19 @@ from django.core.exceptions import ObjectDoesNotExist
 from .hotel_search import *
 # Create your views here.
 
+def search(request):
+    if request.method == "POST":
+        country = request.POST['country'] 
+        description_hotel = request.POST['descriptionHotel'] 
+        city = request.POST['city'] 
+        rating = request.POST['rating'] 
+        number_of = int(request.POST['numberOf'])
+        print("in search: ", city, number_of, description_hotel)
+        test = requirementbased(city,number_of,description_hotel)
+        print('out put search: ',test)
+    context = {}
+    return render(request,'search.html',context)
+
 def register(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -96,7 +109,9 @@ def recommend_hotel_by_city_feature(request):
     city = "london"
     number = 4
     features = 'I need a room with free wifi'
-    random_forest_based(city, number, features)
+    output = random_forest_based(city, number, features)
+    print('output',output)
+    # print(output)
     return render(request, 'home.html')
 
 def new_booking(request, roomid):

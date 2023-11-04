@@ -1,18 +1,16 @@
 import numpy as np
 import pandas as pd
-import json
-from sklearn.model_selection import train_test_split
-from nltk.corpus import stopwords 
-from nltk.tokenize import word_tokenize 
-import os
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.stem import WordNetLemmatizer
+import math,os,nltk, json
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+import seaborn as sns
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords, wordnet
+from nltk.tokenize import word_tokenize 
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from nltk.stem import WordNetLemmatizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 # Initialize the TF-IDF vectorizer
