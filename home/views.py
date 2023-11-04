@@ -23,7 +23,7 @@ def search(request):
             output = citybased(city)
         else:
             output = requirementbased(city,number_of,description_hotel)
-            create_user_preference(user_profile,city,number_of,description_hotel)
+            create_user_preference(user_profile,city,number_of,description_hotel,25)
         hotelList = get_hotels_data_by_codes(output)
         print(hotelList)
         context = {'hotelList': hotelList}
@@ -126,11 +126,13 @@ def new_booking(request, roomid):
     hotel_id = roomid
     userProfile = UserProfile.objects.get(user=request.user)
     create_at = datetime.now()
-    bookHotel(userProfile, hotel_id, create_at)
+    day_in = datetime.strptime('04/11/2023', "%d/%m/%Y")
+    day_out = datetime.strptime('08/11/2023', "%d/%m/%Y")
+    bookHotel(userProfile, hotel_id, create_at,day_in,day_out)
     user = UserProfile.objects.get(user=request.user)
     bookings = BookingHotel.objects.filter(user=user)
     userPreferences = getUserPreferencesByRoom(roomid)
-    create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2])
+    create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2],50)
     return render(request, 'booking_list.html', {'bookings': bookings})
 
 def booking_detail(request, booking_id):
@@ -150,11 +152,11 @@ def add_wishlist(request, roomid):
     if not request.user.is_authenticated:
         return redirect('login') 
     user = UserProfile.objects.get(user=request.user)
-    WishList.objects.get_or_create(user=user, hotelID=roomid)
+    WishList.objects.get_or_create(user=user, roomId=roomid)
     hotelcode = get_hotelcode_by_room(roomid)
     userProfile = UserProfile.objects.get(user=request.user)
     userPreferences = getUserPreferencesByRoom(roomid)
-    create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2])
+    create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2],75)
     return redirect('hotel_detail', hotelcode=hotelcode)
 
 
@@ -171,7 +173,7 @@ def hotel_detail(request,hotelcode):
         return redirect('login') 
     listroom = get_room_in_hotel(hotelcode)
     user = UserProfile.objects.get(user=request.user)
-    wishlist_items = set(WishList.objects.filter(user=user).values_list('hotelID', flat=True).distinct())
+    wishlist_items = set(WishList.objects.filter(user=user).values_list('roomId', flat=True).distinct())
     output = []
     
     for room in listroom:
@@ -188,7 +190,6 @@ def rate_hotel(request):
         hotel_id = request.POST.get('hotel_id')
         value = request.POST.get('value')
         user = UserProfile.objects.get(user=request.user)
-
         rating = Rating.objects.create(
             user=user,
             hotelID=hotel_id,

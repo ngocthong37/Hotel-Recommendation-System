@@ -1,25 +1,26 @@
 from datetime import datetime
 from .models import *
 
-def bookHotel(user, hotel_id, create_at):
-    booking = BookingHotel(user=user, hotelID=hotel_id, date_booking=create_at)
+def bookHotel(user, roomId, create_at, day_in, day_out):
+    booking = BookingHotel(user=user, roomId=roomId, date_booking=create_at, date_in = day_in, date_return = day_out)
     booking.save()
 
-def rateHotel(user, hotel_id, value):
+def rateHotel(user, roomId, value):
     rating = Rating.objects.create(
             user=user,
-            hotelID=hotel_id,
+            roomId=roomId,
             value=value
         )
 
-def addWishList(user, hotel_id):
-    wish_list_item, created = WishList.objects.get_or_create(user=user, hotelID=hotel_id)
+def addWishList(user, roomId):
+    WishList.objects.get_or_create(user=user, roomId=roomId)
 
-def create_user_preference(user_profile, city, number, feature):
+def create_user_preference(user_profile, city, number, feature, weight):
     user_preference = UserPreferences.objects.create(
         user=user_profile,
         city=city,
         number=number,
-        feature=feature
+        feature=feature,
+        weight = weight 
     )
     return user_preference
