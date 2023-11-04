@@ -3,12 +3,13 @@ import csv
 import os
 import json
 
-
 current_directory = os.getcwd()
+hotel_cost_path = os.path.join(current_directory, 'data-set', 'hotels_RoomPrice.csv')
+hotel_details_path = os.path.join(current_directory, 'data-set', 'Hotel_details.csv')
 
+# Kiểm tra xem các tệp tin tồn tại hay không và đọc chúng nếu tồn tại
 hotel_info_path = os.path.join(current_directory, 'data-set', 'Hotel.csv')
 hotel_price_average_path = os.path.join(current_directory, 'data-set', 'HotelPriceSummary.csv')
-
 if os.path.exists(hotel_info_path):
     hotel_info = pd.read_csv(hotel_info_path, delimiter=',')
 else:
@@ -34,3 +35,13 @@ def get_hotelcode_by_room(roomid):
     rs = hotelId[0]
     return rs
 
+def getUserPreferencesByRoom(roomid):
+    hotel_price_average['city'] = hotel_price_average['address'].str.split(',').str[1].str.strip()
+    filtered_rows = hotel_info[hotel_info['id']==roomid]
+    number = filtered_rows['maxoccupancy'].to_list()
+    feature = filtered_rows['roomamenities'].to_list()
+    filtered = hotel_price_average[hotel_price_average['hotelcode']==get_hotelcode_by_room(roomid)]
+    city = filtered['city'].to_list()
+    (city[0],feature[0].replace(': ;',', '),number[0])
+    rs =[city[0],int(number[0]),feature[0].replace(': ;',', ')]
+    return rs
