@@ -141,8 +141,8 @@ def new_booking(request, roomid, dayin, dayout):
     roomId = roomid
     userProfile = UserProfile.objects.get(user=request.user)
     create_at = datetime.now()
-    day_in = datetime.strptime(dayin, "%d-%m-%Y").date()
-    day_out =  datetime.strptime(dayout, "%d-%m-%Y").date()
+    day_in = datetime.strptime(dayin, "%Y-%m-%d").date()
+    day_out =  datetime.strptime(dayout, "%Y-%m-%d").date()
     bookHotel(userProfile, roomId, create_at,day_in,day_out)
     user = UserProfile.objects.get(user=request.user)
     bookings = BookingHotel.objects.filter(user=user)

@@ -43,15 +43,6 @@
             </div>
             <div class="detail-room-btn">
               <button class="btn btn-success showPopupButton" data-roomid="{{ room.id }}">Book this room</button>
-              <div id="popup" class="popup">
-                <span class="close" id="closePopupButton">&times;</span>
-                <p>Chọn khoảng thời gian:</p>
-                <input type="date" id="dayin" name="dayin">
-                <input type="date" id="dayout" name="dayout">
-                <button class="btn btn-success btn-booking" type="button" name="book" data-room="0" id="booking-button"
-                  onclick="redirectToNewBooking()">Book this room</button>
-                </form>
-              </div>
               <button class="btn btn-custom" type="submit" name="addWishlist">
                 {% if room.isWishList %}
                 <a href="{% url 'add_wishlist' room.id %}"> <img src="{% static 'icon/heart-full.png' %}"
@@ -66,6 +57,15 @@
           </div>
           {% endfor %}
         </div>
+      </div>
+      <div id="popup" class="popup">
+        <span class="close" id="closePopupButton">&times;</span>
+        <p>Select check-in and check-out times:</p>
+        <input type="date" id="dayin" name="dayin">
+        <input type="date" id="dayout" name="dayout">
+        <button class="btn btn-success btn-booking" type="button" data-room="" id="booking-button"
+          onclick="redirectToNewBooking()">Book this room</button>
+        </form>
       </div>
     </main>
   </div>
@@ -90,15 +90,12 @@
     function redirectToNewBooking() {
       var dayin = document.getElementById("dayin").value;
       var dayout = document.getElementById("dayout").value;
+      // var roomId = document.getElementById("roomId").value;
       var bookingButton = document.getElementById('booking-button')
       var roomId = bookingButton.getAttribute('data-room');
-      var url = "/new_booking/" + roomID + "/" + dayin + "/" + dayout; 
+      var url = "/new_booking/" + roomId + "/" + dayin + "/" + dayout; 
       window.location.href = url; 
     }
-  </script>
-  <script>
-    flatpickr("#{{ form.my_date.id_for_label }}", { dateFormat: "Y-m-d" });
-    flatpickr("#{{ form.my_time.id_for_label }}", { enableTime: true, noCalendar: true, dateFormat: "H:i" });
   </script>
 </body>
 
