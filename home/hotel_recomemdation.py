@@ -205,9 +205,9 @@ def random_forest_based(city, number, features):
             print(result)
             return result
         else:
-            return "No Hotels Available based on given features"
+            return []
     else:
-        return "No Hotels Available based on given features"
+        return []
      
     #     if not predicted_hotels.empty:
     #         # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
