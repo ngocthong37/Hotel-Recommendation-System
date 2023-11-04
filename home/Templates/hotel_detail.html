@@ -1,62 +1,95 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hotel Detail</title>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'styles/hotelDetail.css' %}" />
-  </head>
 
-  <body>
-    <div class="w-100">
-      {% comment %}========== Header ============{% endcomment %}
-      <header class="header d-flex justify-content-center flex-column py-5 px-3">
-        <div class="d-flex align-items-center gap-4">
-          <a href="/home">
-            <span class="d-flex justify-content-center align-items-center"
-              ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#66BA7A" class="bi bi-caret-left" viewBox="0 0 16 16">
-                <path d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" /></svg
-            ></span>
-          </a>
-          <h1>{{ hotel.hotelname }}</h1>
-        </div>
-      </header>
-      <main class="d-flex flex-column pt-5">
-        {% comment %} ========= CATEGORY ============ {% endcomment %}
-        <div class="category mb-5">
-          <div class="row gx-2 align-items-center justify-content-center gap-2">
-            {% for room in listroom %}
-            <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
-              <div class="hotel-image">
-                <img src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
-              </div>
-              <div class="hotel-detail p-2">
-                <h6 class="hotel-name">{{ room.roomtype }}</h6>
-                <span class="hotel-description">{{ room.ratedescription }}</span>
-                <span class="hotel-price">${{ room.onsiterate}}</span>
-              </div>
-              <div class="detail-room-btn">
-                <button class="btn btn-success btn-booking" type="submit" name="register">
-                  <a href="{% url 'new_booking' room.id %}">Book this room</a>
-                </button>
-                <button class="btn btn-custom" type="submit" name="register">
-                  {% if room.isWishList %}
-                  <a href="{% url 'add_wishlist' room.id %}"> <img src="{% static 'icon/heart-full.png' %}" style="width: 24px; height: 24px" /></a>
-                  {% else %}
-                  <a href="{% url 'add_wishlist' room.id %}">
-                    <img src="{% static 'icon/heart-out-line.svg' %}" />
-                  </a>
-                  {% endif %}
-                </button>
-              </div>
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Detail</title>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'styles/hotelDetail.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+</head>
+
+<body>
+  <div class="w-100">
+    {% comment %}========== Header ============{% endcomment %}
+    <header class="header d-flex justify-content-center flex-column py-5 px-3">
+      <div class="d-flex align-items-center gap-4">
+        <a href="/home">
+          <span class="d-flex justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg"
+              width="24" height="24" fill="#66BA7A" class="bi bi-caret-left" viewBox="0 0 16 16">
+              <path
+                d="M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z" />
+            </svg></span>
+        </a>
+        <h1>{{ hotel.hotelname }}</h1>
+      </div>
+    </header>
+    <main class="d-flex flex-column pt-5">
+      {% comment %} ========= CATEGORY ============ {% endcomment %}
+      <div class="category mb-5">
+        <div class="row gx-2 align-items-center justify-content-center gap-2">
+          {% for room in listroom %}
+          <div class="col-5 hotel-item d-flex align-items-center flex-column gap-2">
+            <div class="hotel-image">
+              <img
+                src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D" />
             </div>
-            {% endfor %}
+            <div class="hotel-detail p-2">
+              <h6 class="hotel-name">{{ room.roomtype }}</h6>
+              <span class="hotel-description">{{ room.ratedescription }}</span>
+              <span class="hotel-price">${{ room.onsiterate}}</span>
+            </div>
+            <div class="detail-room-btn">
+              <button class="btn btn-success btn-booking" id="showPopupButton">Book this room</button>
+              <div id="popup" class="popup">
+                <span class="close" id="closePopupButton">&times;</span>
+                <p>Chọn khoảng thời gian:</p>
+                <input type="date" id="dayin" name="dayin">
+                <input type="date" id="dayout" name="dayout">
+                <button class="btn btn-success btn-booking" type="button" name="book"
+                  onclick="redirectToNewBooking()">Book this room</button>
+                </form>
+              </div>
+              <button class="btn btn-custom" type="submit" name="addWishlist">
+                {% if room.isWishList %}
+                <a href="{% url 'add_wishlist' room.id %}"> <img src="{% static 'icon/heart-full.png' %}"
+                    style="width: 24px; height: 24px" /></a>
+                {% else %}
+                <a href="{% url 'add_wishlist' room.id %}">
+                  <img src="{% static 'icon/heart-out-line.svg' %}" />
+                </a>
+                {% endif %}
+              </button>
+            </div>
           </div>
+          {% endfor %}
         </div>
-      </main>
-    </div>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  </body>
+      </div>
+    </main>
+  </div>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script>
+    document.getElementById("showPopupButton").addEventListener("click", function () {
+      document.getElementById("popup").style.display = "block";
+    });
+    document.getElementById("closePopupButton").addEventListener("click", function () {
+      document.getElementById("popup").style.display = "none";
+    });
+  </script>
+  <script>
+    function redirectToNewBooking() {
+      var dayin = document.getElementById("dayin").value;
+      var dayout = document.getElementById("dayout").value;
+      var url = "{% url 'new_booking' room.id dayin dayout %}";
+      window.location.href = url;
+    }
+  </script>
+  <script>
+    flatpickr("#{{ form.my_date.id_for_label }}", { dateFormat: "Y-m-d" });
+    flatpickr("#{{ form.my_time.id_for_label }}", { enableTime: true, noCalendar: true, dateFormat: "H:i" });
+  </script>
+</body>
+
 </html>
