@@ -99,16 +99,14 @@ def recommend_hotel_by_city_feature(request):
     random_forest_based(city, number, features)
     return render(request, 'home.html')
 
-def new_booking(request):
-    if request.method == 'POST':
-        hotel_id = request.POST['hotelID']
-        user_id = UserProfile.objects.get(user=request.user)
-        create_at = datetime.now()
-        bookHotel(user_id, hotel_id, create_at)
-        return redirect('booking_list')
-    else:
-        users = User.objects.all()
-        return render(request, 'new_booking.html', {'users': users})
+def new_booking(request, roomid):
+    hotel_id = roomid
+    user_id = UserProfile.objects.get(user=request.user)
+    create_at = datetime.now()
+    bookHotel(user_id, hotel_id, create_at)
+    user = UserProfile.objects.get(user=request.user)
+    bookings = BookingHotel.objects.filter(user=user)
+    return render(request, 'booking_list.html', {'bookings': bookings})
 
 def booking_detail(request, booking_id):
     booking = get_object_or_404(BookingHotel, booking_id=booking_id)
@@ -119,17 +117,12 @@ def booking_list(request):
     bookings = BookingHotel.objects.filter(user=user)
     return render(request, 'booking_list.html', {'bookings': bookings})
 
-def add_wishlist(request):
-    if request.method == "POST":
-        hotel_id = request.POST.get("hotel_id")
-        user = UserProfile.objects.get(user=request.user)  # Lấy UserProfile của người dùng đang đăng nhập
+def add_wishlist(request, roomid):
+    user = UserProfile.objects.get(user=request.user)
+    WishList.objects.get_or_create(user=user, hotelID=roomid)
+    hotelcode = get_hotelcode_by_room(roomid)
+    return redirect('hotel_detail', hotelcode=hotelcode)
 
-        # Lồng đoạn code vào trong view
-        wish_list_item, created = WishList.objects.get_or_create(user=user, hotelID=hotel_id)
-
-        return redirect("wishlist")  # Chuyển hướng đến trang wishlist sau khi thêm
-
-    return render(request, "add_wishlist.html")
 
 def wishlist(request):
     user = UserProfile.objects.get(user=request.user) 
@@ -155,7 +148,6 @@ def rate_hotel(request):
         )
 
         return redirect('rating_list')
-
     return render(request, 'rate_hotel.html')
 
 def rating_list(request):

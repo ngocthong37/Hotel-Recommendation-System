@@ -55,6 +55,22 @@
               <span class="hotel-description">{{ room.ratedescription }}</span>
               <span class="hotel-price">${{ room.onsiterate}}</span>
             </div>
+            <div>
+              <button
+                class="btn btn-success btn-custom"
+                type="submit"
+                name="register"
+              >
+              <a href="{% url 'new_booking' room.id %}">Book this room</a>
+              </button>
+              <button
+                class="btn btn-success btn-custom"
+                type="submit"
+                name="register"
+              >
+                <a href="{% url 'add_wishlist' room.id %}">Add to wishlist</a>
+              </button>
+            </div>
           </div>
           {% endfor %}
         </div>

@@ -140,8 +140,8 @@ def requirementbased(city,number,features):
     reqbased['similarity']=cos
     reqbased=reqbased.sort_values(by='similarity',ascending=False)
     reqbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    result = reqbased[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription', 'similarity']].head(10).to_dict(orient='records')
-    return json.dumps(result, ensure_ascii=False)
+    result = reqbased[['hotelcode']].head(10).to_list()
+    return result
 
 def ratebased(city,number,features):
     hotel['city']=hotel['city'].str.lower()
@@ -171,9 +171,8 @@ def ratebased(city,number,features):
     rtbased['similarity']=cos
     rtbased=rtbased.sort_values(by='similarity',ascending=False)
     rtbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    result = rtbased[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'ratedescription', 'similarity']].head(10).to_dict(orient='records')
-    return json.dumps(result, ensure_ascii=False)
-
+    result = rtbased[['hotelcode']].head(10).to_list()
+    return result
 
 def random_forest_based(city, number, features):
     hotel['city'] = hotel['city'].str.lower()
@@ -211,9 +210,7 @@ def random_forest_based(city, number, features):
             return "No Hotels Available based on given features"
     else:
         return "No Hotels Available based on given features"
-    
-
-
+     
     #     if not predicted_hotels.empty:
     #         # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
     #         predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
