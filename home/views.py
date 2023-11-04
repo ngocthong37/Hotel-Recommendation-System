@@ -5,20 +5,26 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-from.func import *
+from .func import *
 from django.core.exceptions import ObjectDoesNotExist
 from .hotel_search import *
 # Create your views here.
 
 def search(request):
+    if not request.user.is_authenticated:
+        return redirect('login') 
+    user_profile = UserProfile.objects.get(user=request.user) 
     if request.method == "POST":
         description_hotel = request.POST['descriptionHotel'] 
         city = request.POST['city'] 
         number_of = int(request.POST['numberOf'])
         print("in search: ", city, number_of, description_hotel)
-        test = requirementbased(city,number_of,description_hotel)
-        print('out put search: ',test)
-        hotelList = get_hotels_data_by_codes(test)
+        if number_of is None and description_hotel is None:
+            output = citybased(city)
+        else:
+            output = requirementbased(city,number_of,description_hotel)
+            create_user_preference(user_profile,city,number_of,description_hotel)
+        hotelList = get_hotels_data_by_codes(output)
         print(hotelList)
         context = {'hotelList': hotelList}
         return render(request, 'search.html', context)
@@ -72,82 +78,97 @@ def get_home(request):
     username = request.user.first_name + " " + request.user.last_name
     user_profile = UserProfile.objects.get(user=request.user) 
     try:
-        userPreferences = UserPreferences.objects.get(user=user_profile)
+        userPreferenceslist = UserPreferences.objects.filter(user=user_profile)
     except ObjectDoesNotExist:
-        userPreferences = None 
-    if userPreferences is not None:
-        print(userPreferences.number)
-        print(userPreferences.city)
-        print(userPreferences.feature)
-        hotel_list = get_hotels_data_by_codes(random_forest_based(userPreferences.city, userPreferences.number, userPreferences.feature))
-        print(hotel_list)
+        userPreferenceslist = None 
+    if userPreferenceslist is not None:
+        hotel_code_list =[]
+        for userPreferences in userPreferenceslist:
+            hotel_code_list = random_forest_based(userPreferences.city, int(userPreferences.number), userPreferences.feature) + hotel_code_list
+        print(hotel_code_list)
     else:
         city = 'london'
         number = 4
         features = 'I need a room with free wifi'
-        hotel_list = get_hotels_data_by_codes(random_forest_based(city, number, features))
-        print(hotel_list) # userPreferences không tồn tại, thực hiện xử lý khi không có userPreferences
-    
+        hotel_code_list = random_forest_based(city, number, features)
+        print(hotel_code_list) 
+    hotel_list = get_hotels_data_by_codes(hotel_code_list)
     context = {'username': username, 'result': hotel_list}
     return render(request, 'home.html', context) 
 
-def recommend_hotels_by_requirement(request):
-    city = 'london'
-    number = 4
-    features = 'I need a room with heating'
-    output = requirementbased(city, number, features)
-    print(output)
-    # Trả kết quả về template hoặc API response
-    return render(request, 'home.html')
+# def recommend_hotels_by_requirement(request):
+#     city = 'london'
+#     number = 4
+#     features = 'I need a room with heating'
+#     output = requirementbased(city, number, features)
+#     print(output)
+#     return render(request, 'home.html')
 
-def recommend_hotel_by_city(request):
-    city = "london"
-    output = citybased(city)
-    print(output)
-    return render(request, 'home.html')
+# def recommend_hotel_by_city(request):
+#     city = "london"
+#     output = citybased(city)
+#     print(output)
+#     return render(request, 'home.html')
 
-def recommend_hotel_by_city_feature(request):
+# def recommend_hotel_by_city_feature(request):
 
-    city = "london"
-    number = 4
-    features = 'I need a room with free wifi'
-    output = random_forest_based(city, number, features)
-    print('output',output)
-    # print(output)
-    return render(request, 'home.html')
+#     city = "london"
+#     number = 4
+#     features = 'I need a room with free wifi'
+#     output = random_forest_based(city, number, features)
+#     print('output',output)
+#     # print(output)
+#     return render(request, 'home.html')
 
 def new_booking(request, roomid):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     hotel_id = roomid
-    user_id = UserProfile.objects.get(user=request.user)
+    userProfile = UserProfile.objects.get(user=request.user)
     create_at = datetime.now()
-    bookHotel(user_id, hotel_id, create_at)
+    bookHotel(userProfile, hotel_id, create_at)
     user = UserProfile.objects.get(user=request.user)
     bookings = BookingHotel.objects.filter(user=user)
+    userPreferences = getUserPreferencesByRoom(roomid)
+    create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2])
     return render(request, 'booking_list.html', {'bookings': bookings})
 
 def booking_detail(request, booking_id):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     booking = get_object_or_404(BookingHotel, booking_id=booking_id)
     return render(request, 'booking_detail.html', {'booking': booking})
 
 def booking_list(request):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     user = UserProfile.objects.get(user=request.user)
     bookings = BookingHotel.objects.filter(user=user)
     return render(request, 'booking_list.html', {'bookings': bookings})
 
 def add_wishlist(request, roomid):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     user = UserProfile.objects.get(user=request.user)
     WishList.objects.get_or_create(user=user, hotelID=roomid)
     hotelcode = get_hotelcode_by_room(roomid)
+    userProfile = UserProfile.objects.get(user=request.user)
+    userPreferences = getUserPreferencesByRoom(roomid)
+    create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2])
     return redirect('hotel_detail', hotelcode=hotelcode)
 
 
 def wishlist(request):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     user = UserProfile.objects.get(user=request.user) 
     wishlist_items = WishList.objects.filter(user=user)
     return render(request, "wishlist.html", {'wishlist_items': wishlist_items})
 
 
 def hotel_detail(request,hotelcode):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     listroom = get_room_in_hotel(hotelcode)
     user = UserProfile.objects.get(user=request.user)
     wishlist_items = set(WishList.objects.filter(user=user).values_list('hotelID', flat=True).distinct())
@@ -161,6 +182,8 @@ def hotel_detail(request,hotelcode):
     return render(request, 'hotel_detail.html', context)
 
 def rate_hotel(request):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     if request.method == 'POST':
         hotel_id = request.POST.get('hotel_id')
         value = request.POST.get('value')
@@ -171,11 +194,12 @@ def rate_hotel(request):
             hotelID=hotel_id,
             value=value
         )
-
         return redirect('rating_list')
     return render(request, 'rate_hotel.html')
 
 def rating_list(request):
+    if not request.user.is_authenticated:
+        return redirect('login') 
     ratings = Rating.objects.all()
     return render(request, 'rating_list.html', {'ratings': ratings})
 

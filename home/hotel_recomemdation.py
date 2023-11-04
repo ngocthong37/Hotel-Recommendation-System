@@ -169,7 +169,7 @@ def ratebased(city,number,features):
     rtbased['similarity']=cos
     rtbased=rtbased.sort_values(by='similarity',ascending=False)
     rtbased.drop_duplicates(subset='hotelcode',keep='first',inplace=True)
-    result = rtbased[['hotelcode']].head(10).to_list()
+    result = rtbased['hotelcode'].head(10).to_list()
     return result
 
 def random_forest_based(city, number, features):
