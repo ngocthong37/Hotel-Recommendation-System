@@ -11,6 +11,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from nltk.stem import WordNetLemmatizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
 
 
 # Initialize the TF-IDF vectorizer
@@ -51,7 +52,6 @@ hotel_details=hotel_details.dropna()
 hotel_rooms=hotel_rooms.dropna()
 hotel_details.drop_duplicates(subset='hotelid',keep=False,inplace=True)
 hotel=pd.merge(hotel_rooms,hotel_details,left_on='hotelcode',right_on='hotelid',how='inner')
-
 # Chọn cột 'hotelid' và 'hotelname' từ bảng hotel
 selected_hotel_columns = hotel_details[['hotelid', 'hotelname']]
 # Merge bảng selected_hotel_columns và bảng hotel_cost
@@ -125,7 +125,7 @@ def requirementbased(city,number,features):
     reqbased=reqbased[reqbased['guests_no']==number]
     reqbased=reqbased.set_index(np.arange(reqbased.shape[0]))
     l1 =[];l2 =[];cos=[];
-    #print(reqbased['roomamenities'])
+
     for i in range(reqbased.shape[0]):
         temp_tokens=word_tokenize(reqbased['roomamenities'][i])
         temp1_set={w for w in temp_tokens if not w in sw}
@@ -133,7 +133,6 @@ def requirementbased(city,number,features):
         for se in temp1_set:
             temp_set.add(lemm.lemmatize(se))
         rvector = temp_set.intersection(f_set)
-        #print(rvector)
         cos.append(len(rvector))
     reqbased['similarity']=cos
     reqbased=reqbased.sort_values(by='similarity',ascending=False)
@@ -208,16 +207,32 @@ def random_forest_based(city, number, features):
             return []
     else:
         return []
-     
-    #     if not predicted_hotels.empty:
-    #         # predicted_hotels = predicted_hotels.sort_values(by='similarity', ascending=False)
-    #         predicted_hotels.drop_duplicates(subset='hotelcode', keep='first', inplace=True)
-    #         result = predicted_hotels[['city', 'hotelname', 'roomtype', 'guests_no', 'starrating', 'address', 'roomamenities', 'ratedescription']].head(10).to_dict(orient='records')
-    #         print(result)
-    #         return json.dumps(result, ensure_ascii=False)
-    #     else:
-    #         return json.dumps({'error': 'No Hotels Available based on given features'}, ensure_ascii=False)
-    # else:
-    #     return json.dumps({'error': 'No Hotels Available for the specified city and number of guests'}, ensure_ascii=False)
 
 
+def knn_recommendation (features):
+    # Preprocess the data
+    hotel['city'] = hotel['city'].str.lower()
+    hotel['roomamenities'] = hotel['roomamenities'].str.lower()
+
+    # Split the data
+    X = tfidf_vectorizer.fit_transform(hotel['roomamenities'])
+    y = hotel['hotelcode']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train the KNN model
+    knn_model = KNeighborsClassifier(n_neighbors=5)  # You can adjust the number of neighbors as needed
+    knn_model.fit(X_train, y_train)
+    # Preprocess user input
+    user_input_features = tfidf_vectorizer.transform([features])
+
+    # Make predictions
+    predicted_hotels = knn_model.kneighbors(user_input_features, n_neighbors=10)  # Get the top 10 nearest neighbors
+
+    # Retrieve the hotel codes for the recommended hotels
+    recommended_hotel_codes = y_train.iloc[predicted_hotels[1][0]]
+    recommended_hotel_codes = recommended_hotel_codes.drop_duplicates().to_list()
+
+    # Print or use the recommended hotel codes as needed
+    print("Recommended Hotel Codes:", recommended_hotel_codes)
+
+knn_recommendation('heating')

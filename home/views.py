@@ -155,7 +155,9 @@ def booking_detail(request, booking_id):
     if not request.user.is_authenticated:
         return redirect('login') 
     booking = get_object_or_404(BookingHotel, booking_id=booking_id)
-    return render(request, 'booking_detail.html', {'booking': booking})
+    hotel = get_hotels_data_by_codes(get_hotelcode_by_room(booking))[0]
+    context =  {'booking': booking, 'hotel': hotel}
+    return render(request, 'booking_detail.html',context)
 
 def booking_list(request):
     if not request.user.is_authenticated:
