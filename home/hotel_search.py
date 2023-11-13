@@ -45,3 +45,7 @@ def getUserPreferencesByRoom(roomid):
     (city[0],feature[0].replace(': ;',', '),number[0])
     rs =[city[0],int(number[0]),feature[0].replace(': ;',', ')]
     return rs
+
+def get_hotel_list( begin, end):
+    filtered = hotel_price_average.iloc[begin:end].to_dict(orient='records')
+    return filtered

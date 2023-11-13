@@ -97,44 +97,6 @@ def get_home(request):
     context = {'username': username, 'result': hotel_list}
     return render(request, 'home.html', context) 
 
-# def recommend_hotels_by_requirement(request):
-#     city = 'london'
-#     number = 4
-#     features = 'I need a room with heating'
-#     output = requirementbased(city, number, features)
-#     print(output)
-#     return render(request, 'home.html')
-
-# def recommend_hotel_by_city(request):
-#     city = "london"
-#     output = citybased(city)
-#     print(output)
-#     return render(request, 'home.html')
-
-# def recommend_hotel_by_city_feature(request):
-
-#     city = "london"
-#     number = 4
-#     features = 'I need a room with free wifi'
-#     output = random_forest_based(city, number, features)
-#     print('output',output)
-#     # print(output)
-#     return render(request, 'home.html')
-
-# def new_booking(request, roomid):
-#     if not request.user.is_authenticated:
-#         return redirect('login') 
-#     roomId = roomid
-#     userProfile = UserProfile.objects.get(user=request.user)
-#     create_at = datetime.now()
-#     day_in = datetime.strptime('04/11/2023', "%d/%m/%Y")
-#     day_out = datetime.strptime('08/11/2023', "%d/%m/%Y")
-#     bookHotel(userProfile, roomId, create_at,day_in,day_out)
-#     user = UserProfile.objects.get(user=request.user)
-#     bookings = BookingHotel.objects.filter(user=user)
-#     userPreferences = getUserPreferencesByRoom(roomid)
-#     create_user_preference(userProfile,userPreferences[0],userPreferences[1],userPreferences[2],50)
-#     return render(request, 'booking_list.html', {'bookings': bookings})
 
 def new_booking(request, roomid, dayin, dayout):
     if not request.user.is_authenticated:
@@ -236,3 +198,35 @@ def rating_list(request):
     ratings = Rating.objects.all()
     return render(request, 'rating_list.html', {'ratings': ratings})
 
+def testui(request):
+    if not request.user.is_authenticated:
+        return redirect('login') 
+    # user_profile = UserProfile.objects.get(user=request.user) 
+    # try:
+    #     userPreferenceslist = UserPreferences.objects.filter(user=user_profile)
+    # except ObjectDoesNotExist:
+    #     userPreferenceslist = None 
+    # if userPreferenceslist is not None:
+    #     hotel_code_list = random_forest_based(userPreferenceslist[0].city, int(userPreferenceslist[0].number), userPreferenceslist[0].feature)
+    #     hotel_code_list = random_forest_based(userPreferenceslist[1].city, int(userPreferenceslist[1].number), userPreferenceslist[1].feature) + hotel_code_list
+    # else:
+    #     city = 'london'
+    #     number = 4
+    #     features = 'I need a room with free wifi'
+    #     hotel_code_list = random_forest_based(city, number, features)
+    # hotel_list = get_hotels_data_by_codes(hotel_code_list)
+    hotel_list = get_hotels_data_by_codes([31,97])
+    new_hotel1 = get_hotel_list(1,5)
+    new_hotel2 = get_hotel_list(5,9)
+    trending1 = get_hotel_list(10,14)
+    trending2 = get_hotel_list(14,18)
+    context = {'newhotel1': new_hotel1,'newhotel2': new_hotel2,'trending1': trending1,'trending2': trending2, 'result': hotel_list}
+    return render(request, 'home1.html', context)
+
+
+def hotel_list(request,pagenumber):
+    hotel_list = get_hotel_list(pagenumber*10,(pagenumber+1)*10)
+    next = pagenumber +1
+    prev = pagenumber -1
+    context ={'hotelList' : hotel_list,'pageNumber': pagenumber, 'next' : next, 'prev' : prev}
+    return render(request, 'hotel_list.html', context)

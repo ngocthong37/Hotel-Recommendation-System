@@ -46,6 +46,7 @@ h1 {
   overflow: hidden;
   position: relative;
 }
+
 .carousel-item {
   height: 10rem;
   background: #777;
@@ -67,8 +68,7 @@ h1 {
 }
 
 /* ============== Category ================ */
-.category {
-}
+.category {}
 
 .category-see-all {
   font-family: 'Lexend', sans-serif;
@@ -79,6 +79,7 @@ h1 {
   text-align: left;
   color: #00a55d;
 }
+
 .category-title {
   font-family: 'Lexend', sans-serif;
   font-size: 24px;
@@ -103,6 +104,7 @@ h1 {
   background: linear-gradient(180deg, rgba(102, 186, 122, 0.2) 0%, rgba(74, 150, 122, 0) 100%);
   overflow: hidden;
 }
+
 .hotel-image img {
   width: 100%;
   height: 100%;
@@ -118,6 +120,7 @@ h1 {
   text-align: left;
   color: #00a55d;
 }
+
 .hotel-description {
   display: -webkit-box;
   max-width: 200px;
@@ -141,4 +144,17 @@ h1 {
   letter-spacing: 0em;
   text-align: right;
   color: #666e80;
+}
+
+
+.button-container {
+  text-align: center;
+  /* Canh lề hai bên để nút "prev" và "next" nằm hai bên cùng một hàng */
+  margin: 10px 0;
+  /* Khoảng cách từ trên xuống */
+}
+
+button {
+  padding: 10px 20px;
+  /* Định dạng kích thước của nút */
 }
