@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  {% load static %}
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -91,7 +92,7 @@
 
       <div class="container">
 
-        <a href="#" class="header-logo">
+        <a href="{% url 'home'%}" class="header-logo">
           <img src="../static/assets/images/logo/logo1.png" alt="Toan's logo" width="150" height="90">
         </a>
 
@@ -167,12 +168,16 @@
       <button class="action-btn">
         <ion-icon name="heart-outline"></ion-icon>
 
-        <span class="count">0</span>
+        <span class="count">{count}</span>
+      </button>
+      
+      <button class="action-btn">
+        <ion-icon name="person-outline"></ion-icon>
       </button>
 
-      <button class="action-btn" data-mobile-menu-open-btn>
+      <!-- <button class="action-btn" data-mobile-menu-open-btn>
         <ion-icon name="grid-outline"></ion-icon>
-      </button>
+      </button> -->
 
     </div>
 
@@ -666,7 +671,7 @@
 
           <div class="product-featured">
 
-            <h2 class="title">Deal of the day</h2>
+            <h2 class="title">Recommended of the day</h2>
 
             <div class="showcase-wrapper has-scrollbar">
               {% for hotel in result %}
@@ -675,7 +680,7 @@
                 <div class="showcase">
 
                   <div class="showcase-banner">
-                    <img src="{{hotel.image}}" alt="{{hotel.hotelname}}" class="showcase-img" > 
+                    <img src="{{hotel.image}}" alt="{{hotel.hotelname}}" class="showcase-img">
                   </div>
 
                   <div class="showcase-content">
@@ -722,7 +727,7 @@
 
                         <div class="countdown-content">
                           <p class="display-number">22</p>
-                          <p class="display-text">Hours</p> 
+                          <p class="display-text">Hours</p>
                         </div>
 
                         <div class="countdown-content">
@@ -1209,7 +1214,6 @@
   <!--
     - custom js link
   -->
-  <script src="../static/assets/js/script.js"></script>
 
   <!--
     - ionicon link

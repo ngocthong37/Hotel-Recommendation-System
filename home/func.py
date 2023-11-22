@@ -14,7 +14,7 @@ def rateHotel(user, roomId, value):
 
 def addWishList(user, roomId):
     WishList.objects.get_or_create(user=user, roomId=roomId)
-
+    
 def create_user_preference(user_profile, city, number, feature, weight):
     user_preference = UserPreferences.objects.create(
         user=user_profile,

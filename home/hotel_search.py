@@ -49,3 +49,10 @@ def getUserPreferencesByRoom(roomid):
 def get_hotel_list( begin, end):
     filtered = hotel_price_average.iloc[begin:end].to_dict(orient='records')
     return filtered
+
+def get_hotel_by_name(hotlename):
+    hotlename = hotlename.lower()
+    filtered_rows = hotel_price_average[hotel_price_average['hotelname'].str.contains('a')]
+    hotelId = filtered_rows['hotelcode'].to_list()
+    rs = hotelId[0]
+    return rs

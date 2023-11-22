@@ -201,7 +201,7 @@ def rating_list(request):
 def testui(request):
     if not request.user.is_authenticated:
         return redirect('login') 
-    # user_profile = UserProfile.objects.get(user=request.user) 
+    user_profile = UserProfile.objects.get(user=request.user) 
     # try:
     #     userPreferenceslist = UserPreferences.objects.filter(user=user_profile)
     # except ObjectDoesNotExist:
@@ -215,18 +215,27 @@ def testui(request):
     #     features = 'I need a room with free wifi'
     #     hotel_code_list = random_forest_based(city, number, features)
     # hotel_list = get_hotels_data_by_codes(hotel_code_list)
+    count = WishList.objects.filter(user=user_profile).count()   
+    print(count)
     hotel_list = get_hotels_data_by_codes([31,97])
     new_hotel1 = get_hotel_list(1,5)
     new_hotel2 = get_hotel_list(5,9)
     trending1 = get_hotel_list(10,14)
     trending2 = get_hotel_list(14,18)
-    context = {'newhotel1': new_hotel1,'newhotel2': new_hotel2,'trending1': trending1,'trending2': trending2, 'result': hotel_list}
+    context = {'newhotel1': new_hotel1,'newhotel2': new_hotel2,'trending1': trending1,'trending2': trending2, 'result': hotel_list, 'count': count}
     return render(request, 'home1.html', context)
 
 
 def hotel_list(request,pagenumber):
-    hotel_list = get_hotel_list(pagenumber*10,(pagenumber+1)*10)
+    hotel_list = get_hotel_list(pagenumber*24,(pagenumber+1)*24)
     next = pagenumber +1
     prev = pagenumber -1
     context ={'hotelList' : hotel_list,'pageNumber': pagenumber, 'next' : next, 'prev' : prev}
     return render(request, 'hotel_list.html', context)
+
+def hotelList(request,pagenumber):
+    hotel_list = get_hotel_list(pagenumber*24,(pagenumber+1)*24)
+    next = pagenumber +1
+    prev = pagenumber -1
+    context ={'hotelList' : hotel_list,'pageNumber': pagenumber, 'next' : next, 'prev' : prev}
+    return render(request, 'hotellist.html', context)

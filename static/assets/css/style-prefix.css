@@ -1543,7 +1543,6 @@ body::-webkit-scrollbar-thumb:hover { background: hsl(0, 0%, 70%); }
 
 .product-grid .product-img {
   width: 100%;
-  height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
   -webkit-transition: var(--transition-timing);
